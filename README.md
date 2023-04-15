@@ -1,6 +1,6 @@
-# tela_login
+# Software Conexão Hemocentro Doador
 
-Exercicio 1
+Autor: Samuel Spineli Rodrigues
 
 ## Getting Started
 
