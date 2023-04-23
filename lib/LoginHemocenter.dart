@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'shared/libs.dart';
+
 class LoginHemocenter extends StatelessWidget {
   @override
 
@@ -8,7 +10,8 @@ class LoginHemocenter extends StatelessWidget {
       title: "loginhemocentro",
       home: Scaffold(
         appBar: AppBar(title: Text("Tela login hemocentro"),),
-        body: Center(
+        body: Container(
+          decoration: BackgroundImage.backgroundImage,
         ),
       ),
     );
