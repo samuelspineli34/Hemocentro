@@ -178,7 +178,7 @@ class HomePage extends StatelessWidget {
                     } else if (dropdownValue == 'Hemocentro') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterHemocenter()),
+                        MaterialPageRoute(builder: (context) => LoginHemocenter()),
                       );
                     }
                   },

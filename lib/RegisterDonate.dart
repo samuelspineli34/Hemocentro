@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tela_login/LoginDonator.dart';
 import 'shared/libs.dart';
+import 'package:tela_login/main.dart';
 
 class RegisterDonate extends StatelessWidget {
   @override
@@ -44,19 +46,39 @@ class RegisterDonate extends StatelessWidget {
               DefaultTextFields.getTextField('Tipo sanguíneo', tiposangue),
               DefaultTextFields.getTextField('Utiliza alguma substância ilicita?', substancias),
 
-              Container(
-                padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
-                child: ElevatedButton(
-                  child: const Text('Cadastrar', textAlign: TextAlign.center),
-                  onPressed: () {
-                    print("Valor iserido: " + nome.text);
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
+                    child: ElevatedButton(
+                        child: const Text('Voltar',
+                            textAlign: TextAlign.center),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPage()));
+                        }),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: ElevatedButton(
+                      child:
+                      const Text('Cadastrar', textAlign: TextAlign.center),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginDonator()));
+                        print("Valor iserido: " + email.text);
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ]),
         ),
-      ),
-    );
+      ));
   }
 }

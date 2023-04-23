@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tela_login/LoginHemocenter.dart';
+import 'package:tela_login/main.dart';
 import 'shared/libs.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -10,22 +12,21 @@ class RegisterHemocenter extends StatelessWidget {
   final endereco = TextEditingController();
   final cnpj = TextEditingController();
 
-  TextField padrao(TextEditingController controlador, String templateField){
+  TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
       controller: controlador,
     );
   }
 
-
-
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Registro Hemocentro",
-      home: Scaffold(
-        appBar: AppBar(title: Text("Tela registro hemocentro"),),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget> [
+        title: "Registro Hemocentro",
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text("Tela registro hemocentro"),
+          ),
+          body: SingleChildScrollView(
+            child: Column(children: <Widget>[
               DefaultTextFields.getTextField('Nome da Instituição', nome),
               DefaultTextFields.getTextField('E-mail', email),
               DefaultTextFields.getTextField('Senha', senha),
@@ -39,19 +40,39 @@ class RegisterHemocenter extends StatelessWidget {
                 },
               ),*/
 
-              Container(
-                padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
-                child: ElevatedButton(
-                  child: const Text('Cadastrar', textAlign: TextAlign.center),
-                  onPressed: () {
-                    print("Valor iserido: " + email.text);
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
+                    child: ElevatedButton(
+                        child: const Text('Voltar',
+                            textAlign: TextAlign.center),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPage()));
+                        }),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: ElevatedButton(
+                      child:
+                          const Text('Cadastrar', textAlign: TextAlign.center),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginHemocenter()));
+                        print("Valor iserido: " + email.text);
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ]),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
