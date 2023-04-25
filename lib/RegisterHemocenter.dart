@@ -20,13 +20,19 @@ class RegisterHemocenter extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Registro Hemocentro",
-        home: Scaffold(
+      title: "Registro Hemocentro",
+      home: Scaffold(
           appBar: AppBar(
             title: Text("Tela registro hemocentro"),
           ),
-          body: SingleChildScrollView(
-            child: Column(children: <Widget>[
+          body: Container(
+            decoration: BoxDecoration(
+                // Background
+                image: DecorationImage(
+                    image: AssetImage('assets/images/background.jpg'),
+                    fit: BoxFit.cover)),
+            child: SingleChildScrollView(
+                child: Column(children: <Widget>[
               DefaultTextFields.getTextField('Nome da Instituição', nome),
               DefaultTextFields.getTextField('E-mail', email),
               DefaultTextFields.getTextField('Senha', senha),
@@ -44,10 +50,10 @@ class RegisterHemocenter extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 10, 100, 150),
                     child: ElevatedButton(
-                        child: const Text('Voltar',
-                            textAlign: TextAlign.center),
+                        child:
+                            const Text('Voltar', textAlign: TextAlign.center),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -56,7 +62,7 @@ class RegisterHemocenter extends StatelessWidget {
                         }),
                   ),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 150),
                     child: ElevatedButton(
                       child:
                           const Text('Cadastrar', textAlign: TextAlign.center),
@@ -71,8 +77,8 @@ class RegisterHemocenter extends StatelessWidget {
                   ),
                 ],
               ),
-            ]),
-          ),
-        ));
+            ])),
+          )),
+    );
   }
 }

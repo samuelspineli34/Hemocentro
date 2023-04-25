@@ -23,62 +23,68 @@ class RegisterDonate extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Registro Doador",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Tela registro doador"),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              DefaultTextFields.getTextField('E-mail', email),
-              DefaultTextFields.getTextField('Nome', nome),
-              DefaultTextFields.getTextField('Senha', senha),
-              DefaultTextFields.getTextField('Confirmar Senha', confirmarsenha),
-          /*    DefaultTextFields.getTextField(
+        title: "Registro Doador",
+        home: Scaffold(
+            appBar: AppBar(
+              title: Text("Tela registro doador"),
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                  // Background
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/background.jpg'),
+                      fit: BoxFit.cover)),
+              child: SingleChildScrollView(
+                child: Column(children: <Widget>[
+                  DefaultTextFields.getTextField('E-mail', email),
+                  DefaultTextFields.getTextField('Nome', nome),
+                  DefaultTextFields.getTextField('Senha', senha),
+                  DefaultTextFields.getTextField(
+                      'Confirmar Senha', confirmarsenha),
+                  /*    DefaultTextFields.getTextField(
                 if (senha == confirmarsenha) {
                   return "Senha errada";
               },
               ),*/
-              DefaultTextFields.getTextField('Endereco', endereco),
-              DefaultTextFields.getTextField('CPF', cpf),
-              DefaultTextFields.getTextField('Peso (kg)', peso),
-              DefaultTextFields.getTextField('Tipo sanguíneo', tiposangue),
-              DefaultTextFields.getTextField('Utiliza alguma substância ilicita?', substancias),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
-                    child: ElevatedButton(
-                        child: const Text('Voltar',
-                            textAlign: TextAlign.center),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainPage()));
-                        }),
+                  DefaultTextFields.getTextField('Endereco', endereco),
+                  DefaultTextFields.getTextField('CPF', cpf),
+                  DefaultTextFields.getTextField('Peso (kg)', peso),
+                  DefaultTextFields.getTextField('Tipo sanguíneo', tiposangue),
+                  DefaultTextFields.getTextField(
+                      'Utiliza alguma substância ilicita?', substancias),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
+                        child: ElevatedButton(
+                            child: const Text('Voltar',
+                                textAlign: TextAlign.center),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainPage()));
+                            }),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: ElevatedButton(
+                          child: const Text('Cadastrar',
+                              textAlign: TextAlign.center),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginDonator()));
+                            print("Valor iserido: " + email.text);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: ElevatedButton(
-                      child:
-                      const Text('Cadastrar', textAlign: TextAlign.center),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginDonator()));
-                        print("Valor iserido: " + email.text);
-                      },
-                    ),
-                  ),
-                ],
+                ]),
               ),
-            ]),
-        ),
-      ));
+            )));
   }
 }

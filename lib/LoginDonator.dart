@@ -27,16 +27,24 @@ class LoginDonator extends StatelessWidget {
     return MaterialApp(
         title: "Informações Doador",
         home: Scaffold(
-          appBar: AppBar(
-            title: Text("Suas informações"),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-                children: <Widget>[
-                  DefaultTextFields.getTextField('E-mail', email),
+            appBar: AppBar(
+              title: Text("Suas informações"),
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                  // Background
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/background.jpg'),
+                      fit: BoxFit.cover)),
+              child: SingleChildScrollView(
+                child: Column(children: <Widget>[
+                  Container(
+                      color: Colors.white,
+                      child: const Text('E-mail', textAlign: TextAlign.left)),
                   DefaultTextFields.getTextField('Nome', nome),
                   DefaultTextFields.getTextField('Senha', senha),
-                  DefaultTextFields.getTextField('Confirmar Senha', confirmarsenha),
+                  DefaultTextFields.getTextField(
+                      'Confirmar Senha', confirmarsenha),
                   /*    DefaultTextFields.getTextField(
                 if (senha == confirmarsenha) {
                   return "Senha errada";
@@ -46,10 +54,11 @@ class LoginDonator extends StatelessWidget {
                   DefaultTextFields.getTextField('CPF', cpf),
                   DefaultTextFields.getTextField('Peso (kg)', peso),
                   DefaultTextFields.getTextField('Tipo sanguíneo', tiposangue),
-                  DefaultTextFields.getTextField('Utiliza alguma substância ilicita?', substancias),
-                  DefaultTextFields.getTextField('Data da última doação', periodo),
+                  DefaultTextFields.getTextField(
+                      'Utiliza alguma substância ilicita?', substancias),
+                  DefaultTextFields.getTextField(
+                      'Data da última doação', periodo),
                   DefaultTextFields.getTextField('Apto a doar', apto),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -69,7 +78,7 @@ class LoginDonator extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: ElevatedButton(
                           child:
-                          const Text('Sair', textAlign: TextAlign.center),
+                              const Text('Sair', textAlign: TextAlign.center),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -82,7 +91,7 @@ class LoginDonator extends StatelessWidget {
                     ],
                   ),
                 ]),
-          ),
-        ));
+              ),
+            )));
   }
 }

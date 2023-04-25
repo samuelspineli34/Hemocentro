@@ -25,27 +25,33 @@ class MapHemo extends StatelessWidget {
           appBar: AppBar(
             title: Text("Localização de Hemocentros Próximos"),
           ),
-          body:
-          Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: ElevatedButton(
-                      child:
-                      const Text('Voltar', textAlign: TextAlign.center),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginDonator()));
-                        print("Valor iserido: " + email.text);
-                      },
-                    ),
+          body: Container(
+            decoration: BoxDecoration(
+                // Background
+                image: DecorationImage(
+                    image: AssetImage('assets/images/background.jpg'),
+                    fit: BoxFit.cover)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+            Container(
+            ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: ElevatedButton(
+                    child: const Text('Voltar', textAlign: TextAlign.center),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginDonator()));
+                      print("Valor iserido: " + email.text);
+                    },
                   ),
-                ],
-              ),
-        ),
-    );
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
