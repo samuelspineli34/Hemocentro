@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tela_login">
+    package="com.example.hemocentro1">
    <application
-        android:label="tela_login"
+        android:label="hemocentro1"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

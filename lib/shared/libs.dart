@@ -36,3 +36,12 @@ class DefaultTextFields{
       );
     }
 }
+class TextFields {
+  static Container getTextField(String label, TextEditingController controlador) {
+    return Container(
+        child: TextField(
+      controller: controlador// Mostra o valor da variável no campo
+        ),
+    );
+  }
+}

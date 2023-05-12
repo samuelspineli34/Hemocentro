@@ -4,22 +4,20 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:tela_login/LoginDonator.dart';
-import 'package:tela_login/LoginHemocenter.dart';
-import 'package:tela_login/RegisterDonate.dart';
-import 'package:tela_login/RegisterHemocenter.dart';
-
+import 'package:hemocentro1/LoginDonator.dart';
+import 'package:hemocentro1/LoginHemocenter.dart';
+import 'package:hemocentro1/RegisterDonate.dart';
+import 'package:hemocentro1/RegisterHemocenter.dart';
+import 'package:hemocentro1/donatorData.dart';
+import 'package:hemocentro1/hemoData.dart';
 
 import 'services/remote_service.dart';
 import 'models/post.dart';
 import 'shared/libs.dart';
 import 'shared/constants.dart';
-import 'firebase_options.dart';
+import 'package:hemocentro1/firebase_options.dart';
 
-
-
-
-void main() async{
+void main() async {
   runApp(MainPage());
 }
 
@@ -28,71 +26,18 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-const List<String> list = <String>['Hemocentro', 'Doador']; //tipos de usuario
-
-class DropdownButtonApp extends StatelessWidget {
-  const DropdownButtonApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const Scaffold(
-        body: Center(
-          child: DropdownButtonExample(),
-        ),
-      ),
-    );
-  }
-}
-
-class DropdownButtonExample extends StatefulWidget {
-  const DropdownButtonExample({super.key});
-
-  @override
-  State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
-}
-
-class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  String dropdownValue = list.first;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          child: DropdownButton<String>(
-            alignment: Alignment.center,
-            value: dropdownValue,
-            icon: const Icon(Icons.arrow_downward),
-            elevation: 16,
-            style: const TextStyle(color: Colors.black),
-            onChanged: (String? value) {
-              // This is called when the user selects an item.
-              setState(() {
-                dropdownValue = value!;
-              });
-            },
-            items: list.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          )
-      ),
-    );
-  }
-}
+const List<String> tipoUser = <String>[
+  'Hemocentro',
+  'Doador'
+]; //tipos de usuario
 
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
-  _DropdownButtonExampleState _dropdownButtonExampleState = _DropdownButtonExampleState();
 
   List<AppBar> appBarContent = [
     AppBar(title: const Text('Login')),
     AppBar(title: const Text('Notícias')),
+    AppBar(title: const Text('Informações')),
   ];
 
   @override
@@ -103,16 +48,18 @@ class _MainPageState extends State<MainPage> {
             appBar: appBarContent[_currentIndex],
             //drawer: const Drawer(),
             body: IndexedStack(
-                index: _currentIndex, children: [HomePage(dropdownValue: _dropdownButtonExampleState.dropdownValue), AboutPage()]),
+                index: _currentIndex,
+                children: [HomePage(), AboutPage(), InfoPage()]),
             bottomNavigationBar: BottomNavigationBar(
               backgroundColor: Colors.white,
               currentIndex: _currentIndex,
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.app_registration),
-                  label: 'Login',
-                ),
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home')
+                    icon: Icon(Icons.app_registration), label: 'Login'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.newspaper), label: 'Notícias'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.info), label: 'Informações')
               ],
               onTap: (index) {
                 setState(() {
@@ -123,10 +70,13 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-class HomePage extends StatelessWidget {
-  final String dropdownValue;
+class HomePage extends StatefulWidget {
+  @override
+  _HomePage createState() => _HomePage();
+}
 
-  const HomePage({Key? key, required this.dropdownValue}) : super(key: key);
+class _HomePage extends State<HomePage> {
+  String? tipouser = "Hemocentro";
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +100,8 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
                 child: TextField(
                   decoration: InputDecoration(
-                      labelText: 'E-mail', contentPadding: EdgeInsets.all(10.0)),
+                      labelText: 'E-mail',
+                      contentPadding: EdgeInsets.all(10.0)),
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ),
@@ -161,34 +112,74 @@ class HomePage extends StatelessWidget {
                   decoration: InputDecoration(
                       labelText: 'Senha', contentPadding: EdgeInsets.all(10.0)),
                   style: TextStyle(color: Colors.black, fontSize: 20),
-                  obscureText: true,
                 ),
               ),
-              DropdownButtonExample(), //Lista com tipos de acesso
+              Container(
+                margin: const EdgeInsets.fromLTRB(500, 25, 500, 50),
+                color: Colors.white,
+                child: DropdownButton<String>(
+                  alignment: Alignment.center,
+                  focusColor: Colors.white,
+                  dropdownColor: Colors.white,
+                  value: tipouser,
+                  hint: Text('Selecione'),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      tipouser = newValue;
+                    });
+                  },
+                  items: tipoUser.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
                 child: ElevatedButton(
                   child: const Text('Login', textAlign: TextAlign.center),
                   onPressed: () {
-                    if (dropdownValue == 'Doador') {
+                    print("Dropdownvalue: " + tipouser.toString());
+                    DonatorData donatorData = DonatorData(
+                      email: "",
+                      nome: "",
+                      senha: "",
+                      endereco: "",
+                      cpf: "",
+                      peso: "",
+                      tipoSangue: "",
+                      substancias: "",
+                    );
+                    HemoData hemoData = HemoData(
+                      email: "",
+                      nome: "",
+                      senha: "",
+                      endereco: "",
+                      cnpj: "",
+                    );
+                    if (tipouser == 'Hemocentro') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginDonator()),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                LoginHemocenter(hemoData: hemoData)),
                       );
-                    } else if (dropdownValue == 'Hemocentro') {
+                    } else if (tipouser == 'Doador') {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginHemocenter()),
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                LoginDonator(donatorData: donatorData)),
                       );
                     }
                   },
                 ),
               ),
-              const Text(
-                'Primeiro acesso?',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-                textAlign: TextAlign.center
-              ),
+              const Text('Primeiro acesso?',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  textAlign: TextAlign.center),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -196,7 +187,6 @@ class HomePage extends StatelessWidget {
                     child: const Text(
                       'Criar conta doador',
                       style: TextStyle(fontSize: 20),
-
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -241,82 +231,63 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-
   //usamos o ? para evitar o erro de NullSafety
-  List<Post>? posts;
-  var isLoaded = false;
-
-  @override
-  void initState() {
-    super.initState(); //coisa do StatefulWidget
-
-    getData();
-  }
-
-/**
- * Usa a classe  response_service para pegar os posts da api
- */
-  getData() async {
-    posts = await RemoteService().getPosts();
-    if (posts != null) {
-      //coisa do StatefulWidget, basicamente reconstroi a tela
-      setState(() {
-        isLoaded = true;
-      });
-    }
-  }
-
-  /* Transforma os jsons obtidos do getData() e transforma eles em
-  Widgets; isso é necessário para o Carousel, que  precisa de uma lista de Widgets para funcionar
-  */
-  List<Widget> toListWidget() {
-    final widgets = List<Widget>.filled(posts!.length, SizedBox.shrink());
-
-    for (int i = 0; i < posts!.length; i++) {
-      widgets[i] = Container(
-        child: ListView(
-          //cada noticia ficará em uma lista, precisamos pensar em uma forma melhor de organizar elas dentro do container
-          children: [
-            Title(
-              color: Colors.blueGrey,
-              child: Text(posts![i].title),
-            ),
-            Image(
-              image: NetworkImage(posts![i].thumbnailUrl),
-            ),
-          ],
-        ),
-      );
-    }
-    return widgets;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        decoration: BackgroundImage.backgroundImage,
-        child: Container (
-          width: 500,
-          height: 500,
-          margin: EdgeInsets.all(50.0),
-          color: Colors.grey,
-          child: Column(
-            children: [
-              Visibility(
-                visible: isLoaded,
-                replacement: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                child: CarouselSlider(
-                  options: CarouselOptions(height: 400.0),
-                  items: toListWidget(),
-                ),
-              ),
-            ],
-          ),
-        ),
+        alignment: Alignment.center,
+        padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+        color: Colors.red,
       ),
+    );
+  }
+}
+
+class InfoPage extends StatefulWidget {
+  const InfoPage({super.key});
+
+  @override
+  State<InfoPage> createState() => _InfoPageState();
+}
+
+class _InfoPageState extends State<InfoPage> {
+  //usamos o ? para evitar o erro de NullSafety
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+                child: SingleChildScrollView(
+                  child: Text("Titulo maneiro"),
+                )),
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+              child: SingleChildScrollView(
+                child: Text(
+                    'Ter idade entre 16 e 69 anos, desde que a primeira doação tenha sido feita até 60 anos '
+                    '(menores de 18 anos devem possuir consentimento formal do responsável legal); '
+                    'Pessoas com idade entre 60 e 69 anos só poderão doar sangue se já o tiverem feito antes dos 60 anos.'
+                    'Apresentar documento de identificação com foto emitido por órgão oficial '
+                    '(Carteira de Identidade, Carteira Nacional de Habilitação, Carteira de Trabalho, Passaporte, Registro Nacional de Estrangeiro, '
+                    'Certificado de Reservista e Carteira Profissional emitida por classe), serão aceitos documentos digitais com foto.'
+                    'Pesar no mínimo 50 kg.Ter dormido pelo menos 6 horas nas últimas 24 horas.Estar alimentado. '
+                    'Evitar alimentos gordurosos nas 3 horas que antecedem a doação de sangue. '
+                    'Caso seja após o almoço, aguardar 2 horas.'
+                    'Pessoas com idade entre 60 e 69 anos só poderão doar sangue se já o tiverem feito antes dos 60 anos.'
+                    'A frequência máxima é de quatro doações de sangue anuais para o homem e de três doações de sangue anuais para as mulher.'
+                    'O intervalo mínimo entre uma doação de sangue e outra é de dois meses para os homens e de três meses para as mulheres.'),
+              ),
+            ),
+          ]),
     );
   }
 }

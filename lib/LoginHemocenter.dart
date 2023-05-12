@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:tela_login/main.dart';
+import 'package:hemocentro1/main.dart';
 import 'shared/libs.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:hemocentro1/hemoData.dart';
 
-class LoginHemocenter extends StatelessWidget {
+class LoginHemocenter extends StatefulWidget {
+
+  final HemoData hemoData;
+
+  LoginHemocenter({required this.hemoData});
+
+  _LoginHemocenter createState() => _LoginHemocenter(hemoData: hemoData);
+
+}
+
+class _LoginHemocenter extends State<LoginHemocenter> {
+
+  final HemoData hemoData;
+  _LoginHemocenter({required this.hemoData});
+
   @override
-  final email = TextEditingController();
-  final nome = TextEditingController();
-  final senha = TextEditingController();
-  final endereco = TextEditingController();
-  final cnpj = TextEditingController();
-  final sangue = TextEditingController();
+  String? tipossangue = "A+"; // Variável para armazenar o tipo de sangue selecionado
+
+  List<String> tiposSangue = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  ]; // Lista de tipos de sangue
 
   TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
@@ -20,28 +41,35 @@ class LoginHemocenter extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Login Hemocentro",
+        title: "Registro Hemocentro",
         home: Scaffold(
-            appBar: AppBar(
-              title: Text("Informações hemocentro"),
-            ),
-            body: Container(
-              decoration: BoxDecoration(
-                  // Background
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/background.jpg'),
-                      fit: BoxFit.cover)),
-              child: SingleChildScrollView(
-                child: Column(children: <Widget>[
-                  Container(padding: const EdgeInsets.fromLTRB(100, 10, 100, 30)),
-                  DefaultTextFields.getTextField('Nome da Instituição', nome),
-                  DefaultTextFields.getTextField('E-mail', email),
-                  DefaultTextFields.getTextField('Senha', senha),
-                  DefaultTextFields.getTextField('Endereco', endereco),
-                  DefaultTextFields.getTextField('CNPJ', cnpj),
-                  DefaultTextFields.getTextField(
-                      'Tipos sanguineos necessitados', sangue),
-                  /*MultiSelectDialogField(
+          appBar: AppBar(
+            title: Text("Tela registro hemocentro"),
+          ),
+          body: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              Text('E-mail: ' + hemoData.email),
+              Text('Nome: ' + hemoData.nome),
+              Text('Senha: ' + hemoData.senha),
+              Text('Endereço: ' + hemoData.endereco),
+              Text('CNPJ: ' + hemoData.cnpj),
+              Text('Tipos sanguineos necessitados: '),
+              DropdownButton<String>(
+                value: tipossangue,
+                hint: Text('Selecione'),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    tipossangue = newValue;
+                  });
+                },
+                items: tiposSangue.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              /*MultiSelectDialogField(
                 items: _animals.map((e) => MultiSelectItem(e, e.name)).toList(),
                 listType: MultiSelectListType.CHIP,
                 onConfirm: (values) {
@@ -49,25 +77,25 @@ class LoginHemocenter extends StatelessWidget {
                 },
               ),*/
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(100, 20, 100, 0),
-                        child: ElevatedButton(
-                            child:
-                                const Text('Sair', textAlign: TextAlign.center),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainPage()));
-                            }),
-                      ),
-                    ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
+                    child: ElevatedButton(
+                        child: const Text('Sair',
+                            textAlign: TextAlign.center),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPage()));
+                        }),
                   ),
-                ]),
+                ],
               ),
-            )));
+            ]),
+          ),
+        ));
   }
 }

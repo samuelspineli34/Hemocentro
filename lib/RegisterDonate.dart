@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tela_login/LoginDonator.dart';
+import 'package:hemocentro1/LoginDonator.dart';
 import 'shared/libs.dart';
-import 'package:tela_login/main.dart';
+import 'package:hemocentro1/main.dart';
+import 'package:hemocentro1/donatorData.dart';
 
-class RegisterDonate extends StatelessWidget {
+class RegisterDonate extends StatefulWidget {
   @override
+  _RegisterDonateState createState() => _RegisterDonateState();
+}
+
+class _RegisterDonateState extends State<RegisterDonate> {
+  bool _isPasswordVisible = false;
   final email = TextEditingController();
   final nome = TextEditingController();
   final senha = TextEditingController();
@@ -12,8 +18,19 @@ class RegisterDonate extends StatelessWidget {
   final endereco = TextEditingController();
   final cpf = TextEditingController();
   final peso = TextEditingController();
-  final tiposangue = TextEditingController();
   final substancias = TextEditingController();
+  String? tipossangue = "A+"; // Variável para armazenar o tipo de sangue selecionado
+
+  List<String> tiposSangue = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  ]; // Lista de tipos de sangue
 
   TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
@@ -21,35 +38,141 @@ class RegisterDonate extends StatelessWidget {
     );
   }
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: "Registro Doador",
         home: Scaffold(
-            appBar: AppBar(
-              title: Text("Tela registro doador"),
-            ),
-            body: Container(
-              decoration: BoxDecoration(
-                  // Background
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/background.jpg'),
-                      fit: BoxFit.cover)),
-              child: SingleChildScrollView(
-                child: Column(children: <Widget>[
+          appBar: AppBar(
+            title: Text("Tela registro doador"),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+                children: <Widget>[
                   DefaultTextFields.getTextField('E-mail', email),
                   DefaultTextFields.getTextField('Nome', nome),
-                  DefaultTextFields.getTextField('Senha', senha),
-                  DefaultTextFields.getTextField(
-                      'Confirmar Senha', confirmarsenha),
+                  Container(
+                      margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                      child: TextField(
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10.0),
+                      labelText: "Senha",
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    maxLength: 50,
+                    obscureText: !_isPasswordVisible,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                    controller: senha,
+                  ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                    child: TextField(
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        labelText: "Confirmar Senha",
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      maxLength: 50,
+                      obscureText: !_isPasswordVisible,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      controller: confirmarsenha,
+                    ),
+                  ),
                   /*    DefaultTextFields.getTextField(
                 if (senha == confirmarsenha) {
                   return "Senha errada";
               },
               ),*/
-                  DefaultTextFields.getTextField('Endereco', endereco),
-                  DefaultTextFields.getTextField('CPF', cpf),
-                  DefaultTextFields.getTextField('Peso (kg)', peso),
-                  DefaultTextFields.getTextField('Tipo sanguíneo', tiposangue),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        labelText: "CPF",
+                      ),
+                      maxLength: 11,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      controller: cpf,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        labelText: "Peso (kg)",
+                      ),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
+                      controller: peso,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(55, 0, 50, 25),
+                        child: Text(
+                          'Tipo sanguíneo',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                      ),
+                      DropdownButton<String>(
+                        value: tipossangue,
+                        hint: Text('Selecione'),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            tipossangue = newValue;
+                          });
+                        },
+                        items: tiposSangue.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                   DefaultTextFields.getTextField(
                       'Utiliza alguma substância ilicita?', substancias),
                   Row(
@@ -58,33 +181,46 @@ class RegisterDonate extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
                         child: ElevatedButton(
-                            child: const Text('Voltar',
-                                textAlign: TextAlign.center),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainPage()));
-                            }),
+                          child: const Text('Voltar', textAlign: TextAlign.center),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainPage(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: ElevatedButton(
-                          child: const Text('Cadastrar',
-                              textAlign: TextAlign.center),
+                          child: const
+                          Text('Cadastrar', textAlign: TextAlign.center),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginDonator()));
-                            print("Valor iserido: " + email.text);
-                          },
-                        ),
-                      ),
-                    ],
+                          DonatorData donatorData = DonatorData(
+                          email: email.text,
+                          nome: nome.text,
+                          senha: senha.text,
+                          endereco: endereco.text,
+                          cpf: cpf.text,
+                          peso: peso.text,
+                          tipoSangue: tipossangue!,
+                          substancias: substancias.text,
+                        );
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginDonator(donatorData: donatorData)));
+                        print("Valor iserido: " + email.text);
+                      },
+                    ),
                   ),
-                ]),
+                ],
               ),
-            )));
+            ]),
+        ),
+      ));
   }
 }
