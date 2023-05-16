@@ -1,6 +1,9 @@
-# hemocentro1
+# Hemocentro
 
-A new Flutter project.
+Flutter Project for Laboratório de Desenvolvimento para Dispositivos Móveis.
+Group:
+
+Samuel Spineli Rodrigues (@samuelspinelli34)
 
 ## Getting Started
 
