@@ -150,7 +150,7 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                           endereco: endereco.text,
                           cnpj: cnpj.text,
                         );
-
+                        saveUserHemoData(hemoData);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

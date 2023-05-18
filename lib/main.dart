@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:hemocentro1/LoginDonator.dart';
 import 'package:hemocentro1/LoginHemocenter.dart';
@@ -18,6 +19,12 @@ import 'shared/constants.dart';
 import 'package:hemocentro1/firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseFirestore.instance.collection("userdonate").doc("userdonate");
+  FirebaseFirestore.instance.collection("userhemo").doc("userhemo");
   runApp(MainPage());
 }
 
@@ -77,6 +84,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> {
   String? tipouser = "Hemocentro";
+  final email = TextEditingController();
+  final senha = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +112,7 @@ class _HomePage extends State<HomePage> {
                       labelText: 'E-mail',
                       contentPadding: EdgeInsets.all(10.0)),
                   style: TextStyle(color: Colors.black, fontSize: 20),
+                  controller: email,
                 ),
               ),
               Container(
@@ -112,6 +122,7 @@ class _HomePage extends State<HomePage> {
                   decoration: InputDecoration(
                       labelText: 'Senha', contentPadding: EdgeInsets.all(10.0)),
                   style: TextStyle(color: Colors.black, fontSize: 20),
+                  controller: senha,
                 ),
               ),
               Container(
@@ -142,37 +153,10 @@ class _HomePage extends State<HomePage> {
                   child: const Text('Login', textAlign: TextAlign.center),
                   onPressed: () {
                     print("Dropdownvalue: " + tipouser.toString());
-                    DonatorData donatorData = DonatorData(
-                      email: "",
-                      nome: "",
-                      senha: "",
-                      endereco: "",
-                      cpf: "",
-                      peso: "",
-                      tipoSangue: "",
-                      substancias: "",
-                    );
-                    HemoData hemoData = HemoData(
-                      email: "",
-                      nome: "",
-                      senha: "",
-                      endereco: "",
-                      cnpj: "",
-                    );
                     if (tipouser == 'Hemocentro') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                LoginHemocenter(hemoData: hemoData)),
-                      );
+                      loginValidationHemo(email, senha, context);
                     } else if (tipouser == 'Doador') {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                LoginDonator(donatorData: donatorData)),
-                      );
+                      loginValidationDonator(email, senha, context);
                     }
                   },
                 ),

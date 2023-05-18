@@ -23,15 +23,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -50,21 +44,44 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBK0ygUxU-AXw0uLtd3XnoXFDjUoDROuZM',
-    appId: '1:457655825712:web:c6b04c5239e261dc3bc4f5',
-    messagingSenderId: '457655825712',
-    projectId: 'hemocentro-app',
-    authDomain: 'hemocentro-app.firebaseapp.com',
-    databaseURL: 'https://hemocentro-app-default-rtdb.firebaseio.com',
-    storageBucket: 'hemocentro-app.appspot.com',
+    apiKey: 'AIzaSyDXPWGiiQafmbde06RYkGK3DgmZwzgZcaM',
+    appId: '1:16468871445:web:ebcfb8f6d5fe211262011c',
+    messagingSenderId: '16468871445',
+    projectId: 'hemocentro-40c12',
+    authDomain: 'hemocentro-40c12.firebaseapp.com',
+    databaseURL: 'https://hemocentro-40c12-default-rtdb.firebaseio.com',
+    storageBucket: 'hemocentro-40c12.appspot.com',
+    measurementId: 'G-FKD1PNZQWV',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAcQbw-r-pNZikDHo4kQ9tKg0VCph-Qox4',
-    appId: '1:457655825712:android:7f59653e704ecb9a3bc4f5',
-    messagingSenderId: '457655825712',
-    projectId: 'hemocentro-app',
-    databaseURL: 'https://hemocentro-app-default-rtdb.firebaseio.com',
-    storageBucket: 'hemocentro-app.appspot.com',
+    apiKey: 'AIzaSyDQQYsgE6RZYQwjdJtNJGQosgE32HINS8M',
+    appId: '1:16468871445:android:6b83246dd72ebbf562011c',
+    messagingSenderId: '16468871445',
+    projectId: 'hemocentro-40c12',
+    databaseURL: 'https://hemocentro-40c12-default-rtdb.firebaseio.com',
+    storageBucket: 'hemocentro-40c12.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCyEVxVJIZMFiFTNK2Vm4nHuTAqG5FMM9s',
+    appId: '1:16468871445:ios:255109d083722c4b62011c',
+    messagingSenderId: '16468871445',
+    projectId: 'hemocentro-40c12',
+    databaseURL: 'https://hemocentro-40c12-default-rtdb.firebaseio.com',
+    storageBucket: 'hemocentro-40c12.appspot.com',
+    iosClientId: '16468871445-346kod2f1n8e7vtd23gimu5dllvp5ihh.apps.googleusercontent.com',
+    iosBundleId: 'com.example.hemocentro1',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCyEVxVJIZMFiFTNK2Vm4nHuTAqG5FMM9s',
+    appId: '1:16468871445:ios:255109d083722c4b62011c',
+    messagingSenderId: '16468871445',
+    projectId: 'hemocentro-40c12',
+    databaseURL: 'https://hemocentro-40c12-default-rtdb.firebaseio.com',
+    storageBucket: 'hemocentro-40c12.appspot.com',
+    iosClientId: '16468871445-346kod2f1n8e7vtd23gimu5dllvp5ihh.apps.googleusercontent.com',
+    iosBundleId: 'com.example.hemocentro1',
   );
 }

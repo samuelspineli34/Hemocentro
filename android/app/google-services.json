@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "457655825712",
-    "firebase_url": "https://hemocentro-app-default-rtdb.firebaseio.com",
-    "project_id": "hemocentro-app",
-    "storage_bucket": "hemocentro-app.appspot.com"
+    "project_number": "16468871445",
+    "firebase_url": "https://hemocentro-40c12-default-rtdb.firebaseio.com",
+    "project_id": "hemocentro-40c12",
+    "storage_bucket": "hemocentro-40c12.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:457655825712:android:5b7e58b53cdebe863bc4f5",
+        "mobilesdk_app_id": "1:16468871445:android:6b83246dd72ebbf562011c",
         "android_client_info": {
-          "package_name": "com.example.gtk_flutter"
+          "package_name": "com.example.hemocentro1"
         }
       },
       "oauth_client": [
         {
-          "client_id": "457655825712-vvm9u2cimnnmauhoho7ku7su122dmeb9.apps.googleusercontent.com",
+          "client_id": "16468871445-72suobvtnup70mi88bd0i9g0lm8qchq1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAcQbw-r-pNZikDHo4kQ9tKg0VCph-Qox4"
+          "current_key": "AIzaSyDQQYsgE6RZYQwjdJtNJGQosgE32HINS8M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "457655825712-vvm9u2cimnnmauhoho7ku7su122dmeb9.apps.googleusercontent.com",
+              "client_id": "16468871445-72suobvtnup70mi88bd0i9g0lm8qchq1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,31 +37,35 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:457655825712:android:7f59653e704ecb9a3bc4f5",
+        "mobilesdk_app_id": "1:16468871445:android:90c0bca62920c49c62011c",
         "android_client_info": {
           "package_name": "com.example.tela_login"
         }
       },
       "oauth_client": [
         {
-          "client_id": "457655825712-vvm9u2cimnnmauhoho7ku7su122dmeb9.apps.googleusercontent.com",
+          "client_id": "16468871445-72suobvtnup70mi88bd0i9g0lm8qchq1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAcQbw-r-pNZikDHo4kQ9tKg0VCph-Qox4"
+          "current_key": "AIzaSyDQQYsgE6RZYQwjdJtNJGQosgE32HINS8M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "457655825712-vvm9u2cimnnmauhoho7ku7su122dmeb9.apps.googleusercontent.com",
+              "client_id": "16468871445-72suobvtnup70mi88bd0i9g0lm8qchq1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
         }
+      },
+      "rules": {
+        ".read": true,
+        ".write": true
       }
     }
   ],

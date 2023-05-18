@@ -208,7 +208,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                           tipoSangue: tipossangue!,
                           substancias: substancias.text,
                         );
-
+                          saveUserDonatorData(donatorData);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
