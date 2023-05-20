@@ -88,7 +88,24 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
             //signup screen
         }
         else {
-          print("E-mail ou senha inválidos");
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text(
+                    'E-mail ou senha inválidos.'),
+                actions: [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(); // Fechar o diálogo
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         }
       }
     }

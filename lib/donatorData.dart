@@ -22,6 +22,8 @@ final databaseReference = FirebaseDatabase.instance.reference();
 class DonatorData {
   final String email;
   final String nome;
+  final String sexo;
+  final String idade;
   final String senha;
   final String endereco;
   final String cpf;
@@ -32,6 +34,8 @@ class DonatorData {
   DonatorData({
     required this.email,
     required this.nome,
+    required this.sexo,
+    required this.idade,
     required this.senha,
     required this.endereco,
     required this.cpf,
@@ -49,6 +53,8 @@ void saveUserDonatorData(DonatorData userData) async{
     await usersCollection.add({
       'nome': userData.nome,
       'email': userData.email,
+      'sexo': userData.sexo,
+      'idade': userData.idade,
       'senha': userData.senha,
       'endereço': userData.endereco,
       'cpf': userData.cpf,
@@ -66,7 +72,7 @@ void saveUserDonatorData(DonatorData userData) async{
 void loginValidationDonator(TextEditingController emailwritten, TextEditingController senhawritten, BuildContext context) async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('userdonate').get();
-  print("teste1");
+
 
   if (querySnapshot.size > 0) {
     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
@@ -74,19 +80,18 @@ void loginValidationDonator(TextEditingController emailwritten, TextEditingContr
       Map<String, dynamic>? userData = docSnapshot.data() as Map<String, dynamic>?;
 
       if (userData != null) {
-        print("teste2");
+
         // Faça o que for necessário com os dados do usuário
         String email = userData['email'];
         String senha = userData['senha'];
-        print("email: " + email);
-        print("senha: " + senha);
-        print("email hemo: " + emailwritten.text);
-        print("senha senha: " + senhawritten.text);
+
         if (email == emailwritten.text && senha == senhawritten.text) {
-          print("teste3");
+
           DonatorData donatorData = DonatorData(
             email: userData['email'],
             nome: userData['nome'],
+            sexo: userData['sexo'],
+            idade: userData['idade'],
             senha: userData['senha'],
             endereco: userData['endereço'],
             cpf: userData['cpf'],
@@ -101,7 +106,24 @@ void loginValidationDonator(TextEditingController emailwritten, TextEditingContr
           //signup screen
         }
         else {
-          print("E-mail ou senha inválidos");
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Text(
+                    'E-mail ou senha inválidos.'),
+                actions: [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(); // Fechar o diálogo
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         }
       }
     }

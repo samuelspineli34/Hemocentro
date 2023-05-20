@@ -3,6 +3,8 @@ import 'package:hemocentro1/LoginHemocenter.dart';
 import 'package:hemocentro1/main.dart';
 import 'shared/libs.dart';
 import 'package:hemocentro1/hemoData.dart';
+import 'package:flutter/services.dart';
+import 'package:hemocentro1/dataInputs.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class RegisterHemocenter extends StatefulWidget {
@@ -19,6 +21,7 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
   final confirmarsenha = TextEditingController();
   final endereco = TextEditingController();
   final cnpj = TextEditingController();
+  bool elegivel = false;
 
   TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
@@ -95,6 +98,9 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                     color: Colors.black,
                   ),
                   controller: confirmarsenha,
+                  onTapOutside: (val) {
+                    checarSenha(senha, confirmarsenha, context, elegivel);
+                  },
                 ),
               ),
               DefaultTextFields.getTextField('Endereco', endereco),
@@ -102,11 +108,15 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                 margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
                 child: TextField(
                   keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CnpjInputFormatter(), // Classe de formatação personalizada para o CPF
+                  ],
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
                     labelText: "CNPJ",
                   ),
-                  maxLength: 11,
+                  maxLength: 18,
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -165,4 +175,33 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
           ),
         ));
   }
+}
+
+void checarSenha(TextEditingController senha, TextEditingController confirmarsenha, BuildContext context, bool elegivel) {
+
+  if (senha.text != confirmarsenha.text) {
+    elegivel = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Senhas não correspondem'),
+          content: Text(
+              'As senhas digitadas não correspondem. Por favor, tente novamente.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  else
+    {
+      elegivel = true;
+    }
 }

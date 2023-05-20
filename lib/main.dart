@@ -51,6 +51,10 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Login',
+        theme: ThemeData
+          (
+          primaryColorDark: Colors.red
+        ),
         home: Scaffold(
             appBar: appBarContent[_currentIndex],
             //drawer: const Drawer(),
@@ -86,6 +90,7 @@ class _HomePage extends State<HomePage> {
   String? tipouser = "Hemocentro";
   final email = TextEditingController();
   final senha = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +100,8 @@ class _HomePage extends State<HomePage> {
       home: Scaffold(
         body: Container(
           decoration: BoxDecoration(
-              // Background
-              image: DecorationImage(
-                  image: AssetImage('assets/images/background.jpg'),
-                  fit: BoxFit.cover)),
+            color: Colors.redAccent[700],
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -120,17 +123,35 @@ class _HomePage extends State<HomePage> {
                 color: Colors.white,
                 child: TextField(
                   decoration: InputDecoration(
-                      labelText: 'Senha', contentPadding: EdgeInsets.all(10.0)),
+                    labelText: 'Senha',
+                    contentPadding: EdgeInsets.all(10.0),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                      child: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  obscureText: !_isPasswordVisible,
                   style: TextStyle(color: Colors.black, fontSize: 20),
                   controller: senha,
                 ),
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(500, 25, 500, 50),
+                margin: const EdgeInsets.fromLTRB(600, 25, 600, 50),
+                alignment: Alignment.center,
                 color: Colors.white,
                 child: DropdownButton<String>(
+                  autofocus: true,
                   alignment: Alignment.center,
-                  focusColor: Colors.white,
+                  focusColor: Colors.white60,
                   dropdownColor: Colors.white,
                   value: tipouser,
                   hint: Text('Selecione'),
@@ -141,6 +162,7 @@ class _HomePage extends State<HomePage> {
                   },
                   items: tipoUser.map((String value) {
                     return DropdownMenuItem<String>(
+                      alignment: Alignment.center,
                       value: value,
                       child: Text(value),
                     );
@@ -158,7 +180,7 @@ class _HomePage extends State<HomePage> {
                     } else if (tipouser == 'Doador') {
                       loginValidationDonator(email, senha, context);
                     }
-                  },
+                  }
                 ),
               ),
               const Text('Primeiro acesso?',
