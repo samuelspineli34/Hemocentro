@@ -35,29 +35,57 @@ class HemoData {
   });
 }
 
-void saveUserHemoData(HemoData hemoData) async{
+void saveUserHemoData(HemoData hemoData, BuildContext context) async{
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userhemo');
 
-  try {
-    await usersCollection.add({
-    'nome': hemoData.nome,
-    'email': hemoData.email,
-    'senha': hemoData.senha,
-    'endereço': hemoData.endereco,
-    'cnpj': hemoData.cnpj,
-    });
-
-    print('Dados do usuário hemocentro salvos com sucesso.');
-  } catch (error) {
-    print('Erro ao salvar os dados do usuário hemocentro: $error');
+  if (hemoData.nome != "" &&
+      hemoData.email != "" &&
+      hemoData.senha != "" &&
+      hemoData.endereco != "" &&
+      hemoData.cnpj != "") {
+    try {
+      await usersCollection.add({
+        'nome': hemoData.nome,
+        'email': hemoData.email,
+        'senha': hemoData.senha,
+        'endereço': hemoData.endereco,
+        'cnpj': hemoData.cnpj,
+      });
+      print('Dados do usuário hemocentro salvos com sucesso.');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  LoginHemocenter(hemoData: hemoData)));
+    } catch (error) {
+      print('Erro ao salvar os dados do usuário hemocentro: $error');
+    }
+  }
+     else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('Algum campo foi deixado vazio.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
+
 
 void loginValidationHemo(TextEditingController emailwritten, TextEditingController senhawritten, BuildContext context) async {
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('userhemo').get();
-  print("teste1");
 
   if (querySnapshot.size > 0) {
     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
@@ -65,14 +93,9 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
       Map<String, dynamic>? userData = docSnapshot.data() as Map<String, dynamic>?;
 
       if (userData != null) {
-        print("teste2");
         // Faça o que for necessário com os dados do usuário
         String email = userData['email'];
         String senha = userData['senha'];
-        print("email: " + email);
-        print("senha: " + senha);
-        print("email hemo: " + emailwritten.text);
-        print("senha senha: " + senhawritten.text);
         if (email == emailwritten.text && senha == senhawritten.text) {
           HemoData hemoData = HemoData(
             email: userData['email'],

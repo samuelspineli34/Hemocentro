@@ -10,6 +10,7 @@ import 'package:hemocentro1/LoginHemocenter.dart';
 import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/hemoData.dart';
+import 'package:hemocentro1/main.dart';
 
 import 'services/remote_service.dart';
 import 'models/post.dart';
@@ -45,48 +46,80 @@ class DonatorData {
   });
 }
 
-void saveUserDonatorData(DonatorData userData) async{
+void saveUserDonatorData(DonatorData userData, BuildContext context) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userdonate');
 
-  try {
-    await usersCollection.add({
-      'nome': userData.nome,
-      'email': userData.email,
-      'sexo': userData.sexo,
-      'idade': userData.idade,
-      'senha': userData.senha,
-      'endereço': userData.endereco,
-      'cpf': userData.cpf,
-      'peso': userData.peso,
-      'tipo_sanguineo': userData.tipoSangue,
-      'substancias': userData.substancias,
-    });
+  if (userData.nome != "" &&
+      userData.email != "" &&
+      userData.sexo != "" &&
+      userData.idade != "" &&
+      userData.senha != "" &&
+      userData.endereco != "" &&
+      userData.cpf != "" &&
+      userData.peso != "" &&
+      userData.substancias != "") {
+    try {
+      await usersCollection.add({
+        'nome': userData.nome,
+        'email': userData.email,
+        'sexo': userData.sexo,
+        'idade': userData.idade,
+        'senha': userData.senha,
+        'endereço': userData.endereco,
+        'cpf': userData.cpf,
+        'peso': userData.peso,
+        'tipo_sanguineo': userData.tipoSangue,
+        'substancias': userData.substancias,
+      });
 
-    print('Dados do usuário doador salvos com sucesso.');
-  } catch (error) {
-    print('Erro ao salvar os dados do usuário doador: $error');
+      print('Dados do usuário doador salvos com sucesso.');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  LoginDonator(donatorData: userData)));
+    } catch (error) {
+      print('Erro ao salvar os dados do usuário doador: $error');
+    }
+  }
+  else {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('Algum campo foi deixado vazio.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
-void loginValidationDonator(TextEditingController emailwritten, TextEditingController senhawritten, BuildContext context) async {
-  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-      .collection('userdonate').get();
-
+void loginValidationDonator(TextEditingController emailwritten,
+    TextEditingController senhawritten, BuildContext context) async {
+  QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection('userdonate').get();
 
   if (querySnapshot.size > 0) {
     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
       // Acesso aos dados de cada documento individualmente
-      Map<String, dynamic>? userData = docSnapshot.data() as Map<String, dynamic>?;
+      Map<String, dynamic>? userData =
+          docSnapshot.data() as Map<String, dynamic>?;
 
       if (userData != null) {
-
         // Faça o que for necessário com os dados do usuário
         String email = userData['email'];
         String senha = userData['senha'];
 
         if (email == emailwritten.text && senha == senhawritten.text) {
-
           DonatorData donatorData = DonatorData(
             email: userData['email'],
             nome: userData['nome'],
@@ -102,22 +135,20 @@ void loginValidationDonator(TextEditingController emailwritten, TextEditingContr
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => LoginDonator(donatorData: donatorData)));
+                  builder: (context) =>
+                      LoginDonator(donatorData: donatorData)));
           //signup screen
-        }
-        else {
+        } else {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: Text(
-                    'E-mail ou senha inválidos.'),
+                content: Text('E-mail ou senha inválidos.'),
                 actions: [
                   TextButton(
                     child: Text('OK'),
                     onPressed: () {
-                      Navigator.of(context)
-                          .pop(); // Fechar o diálogo
+                      Navigator.of(context).pop(); // Fechar o diálogo
                     },
                   ),
                 ],

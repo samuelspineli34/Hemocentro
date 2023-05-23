@@ -11,12 +11,18 @@ import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/donatorData.dart';
 import 'package:hemocentro1/hemoData.dart';
+import 'package:hemocentro1/MapHemo.dart';
 
-import 'services/remote_service.dart';
-import 'models/post.dart';
-import 'shared/libs.dart';
-import 'shared/constants.dart';
+import '../services/remote_service.dart';
+import '../models/post.dart';
+import '../shared/libs.dart';
+import '../shared/constants.dart';
 import 'package:hemocentro1/firebase_options.dart';
+
+//flutter build appbundle
+//flutter run --multidex
+//flutter --web-renderer html
+//Usar versão android 12.0 no emulador
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,10 +57,15 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Login',
-        theme: ThemeData
-          (
-          primaryColorDark: Colors.red
-        ),
+        theme: ThemeData(primaryColorDark: Colors.red),
+        initialRoute: '/',
+        routes: {
+          '/noticias': (context) => AboutPage(),
+          '/info': (context) => InfoPage(),
+          '/registro_doador': (context) => RegisterDonate(),
+          '/registro_hemocentro': (context) => RegisterHemocenter(),
+          '/mapa': (context) => MapHemo(),
+        },
         home: Scaffold(
             appBar: appBarContent[_currentIndex],
             //drawer: const Drawer(),
@@ -99,16 +110,18 @@ class _HomePage extends State<HomePage> {
     return MaterialApp(
       home: Scaffold(
         body: Container(
+          width: double.maxFinite,
+          height: double.maxFinite,
           decoration: BoxDecoration(
             color: Colors.redAccent[700],
           ),
+          child: SingleChildScrollView (
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                //
-                margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                margin: const EdgeInsets.fromLTRB(80, 30, 80, 0),
                 color: Colors.white,
                 child: TextField(
                   decoration: InputDecoration(
@@ -119,7 +132,7 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(50, 25, 50, 50),
+                margin: const EdgeInsets.fromLTRB(80, 50, 80, 50),
                 color: Colors.white,
                 child: TextField(
                   decoration: InputDecoration(
@@ -145,7 +158,7 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.fromLTRB(600, 25, 600, 50),
+                margin: const EdgeInsets.fromLTRB(80, 0, 80, 50),
                 alignment: Alignment.center,
                 color: Colors.white,
                 child: DropdownButton<String>(
@@ -170,23 +183,23 @@ class _HomePage extends State<HomePage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
+                margin: const EdgeInsets.fromLTRB(80, 0, 80, 10),
                 child: ElevatedButton(
-                  child: const Text('Login', textAlign: TextAlign.center),
-                  onPressed: () {
-                    print("Dropdownvalue: " + tipouser.toString());
-                    if (tipouser == 'Hemocentro') {
-                      loginValidationHemo(email, senha, context);
-                    } else if (tipouser == 'Doador') {
-                      loginValidationDonator(email, senha, context);
-                    }
-                  }
-                ),
+                    child: const Text('Login', textAlign: TextAlign.center),
+                    onPressed: () {
+                      print("Dropdownvalue: " + tipouser.toString());
+                      if (tipouser == 'Hemocentro') {
+                        loginValidationHemo(email, senha, context);
+                      } else if (tipouser == 'Doador') {
+                        loginValidationDonator(email, senha, context);
+                      }
+                    }),
               ),
               const Text('Primeiro acesso?',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                   textAlign: TextAlign.center),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextButton(
@@ -214,10 +227,11 @@ class _HomePage extends State<HomePage> {
                               builder: (context) => RegisterHemocenter()));
                       //signup screen
                     },
-                  ),
+                  )
                 ],
               ),
             ],
+          ),
           ),
         ),
       ),
@@ -237,17 +251,74 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  //usamos o ? para evitar o erro de NullSafety
+  List<Post>? posts;
+  var isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
-        color: Colors.red,
-      ),
+      child: isLoaded
+          ? CarouselSlider(
+        items: toListWidget(),
+        options: CarouselOptions(
+          height: 400,
+          autoPlay: true,
+          enlargeCenterPage: true,
+          aspectRatio: 16 / 9,
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enableInfiniteScroll: true,
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          viewportFraction: 0.8,
+        ),
+      )
+          : CircularProgressIndicator(),
     );
+  }
+
+  /**
+   * Usa a classe  response_service para pegar os posts da api
+   */
+  getData() async {
+    posts = await RemoteService().getPosts();
+    if (posts != null) {
+      //coisa do StatefulWidget, basicamente reconstroi a tela
+      setState(() {
+        isLoaded = true;
+      });
+    }
+  }
+
+  /* Transforma os jsons obtidos do getData() e transforma eles em
+  Widgets; isso é necessário para o Carousel, que  precisa de uma lista de Widgets para funcionar
+  */
+  List<Widget> toListWidget() {
+
+    print(posts![0].thumbnailUrl);
+
+    final widgets = List<Widget>.filled(4, SizedBox.shrink());
+
+    for (int i = 0; i < 4; i++) {
+      widgets[i] = Container(
+        child: ListView(
+          children: [
+            Title(
+              color: Colors.blueGrey,
+              child: Text(posts![i].title),
+            ),
+            Image(
+              image: NetworkImage(posts![i].thumbnailUrl),
+            ),
+          ],
+        ),
+      );
+    }
+    return widgets;
   }
 }
 
@@ -264,36 +335,39 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
+        child: SingleChildScrollView (
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: SingleChildScrollView(
-                  child: Text("Titulo maneiro"),
+                  child: Text("Requisitos para realizar a doação de sangue", textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
                 )),
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
               child: SingleChildScrollView(
                 child: Text(
                     'Ter idade entre 16 e 69 anos, desde que a primeira doação tenha sido feita até 60 anos '
-                    '(menores de 18 anos devem possuir consentimento formal do responsável legal); '
-                    'Pessoas com idade entre 60 e 69 anos só poderão doar sangue se já o tiverem feito antes dos 60 anos.'
+                    '(menores de 18 anos devem possuir consentimento formal do responsável legal).\n'
+                    'Pessoas com idade entre 60 e 69 anos só poderão doar sangue se já o tiverem feito antes dos 60 anos.\n'
                     'Apresentar documento de identificação com foto emitido por órgão oficial '
                     '(Carteira de Identidade, Carteira Nacional de Habilitação, Carteira de Trabalho, Passaporte, Registro Nacional de Estrangeiro, '
-                    'Certificado de Reservista e Carteira Profissional emitida por classe), serão aceitos documentos digitais com foto.'
-                    'Pesar no mínimo 50 kg.Ter dormido pelo menos 6 horas nas últimas 24 horas.Estar alimentado. '
+                    'Certificado de Reservista e Carteira Profissional emitida por classe), serão aceitos documentos digitais com foto.\n'
+                    'Pesar no mínimo 50 kg.\nTer dormido pelo menos 6 horas nas últimas 24 horas. Estar alimentado. \n'
                     'Evitar alimentos gordurosos nas 3 horas que antecedem a doação de sangue. '
-                    'Caso seja após o almoço, aguardar 2 horas.'
-                    'Pessoas com idade entre 60 e 69 anos só poderão doar sangue se já o tiverem feito antes dos 60 anos.'
-                    'A frequência máxima é de quatro doações de sangue anuais para o homem e de três doações de sangue anuais para as mulher.'
-                    'O intervalo mínimo entre uma doação de sangue e outra é de dois meses para os homens e de três meses para as mulheres.'),
+                    'Caso seja após o almoço, aguardar 2 horas.\n'
+                    'Pessoas com idade entre 60 e 69 anos só poderão doar sangue se já o tiverem feito antes dos 60 anos.\n'
+                    'A frequência máxima é de quatro doações de sangue anuais para o homem e de três doações de sangue anuais para as mulher.\n'
+                    'O intervalo mínimo entre uma doação de sangue e outra é de dois meses para os homens e de três meses para as mulheres.\n',
+                    style: const TextStyle(fontSize: 20)),
               ),
             ),
           ]),
+        ),
     );
   }
 }

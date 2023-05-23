@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class CpfInputFormatter extends TextInputFormatter {
   @override
@@ -81,22 +82,26 @@ class CnpjInputFormatter extends TextInputFormatter {
 
 
 class WeightInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
-    String formattedText = newValue.text;
+@override
+TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  String cleanedText = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+  int textLength = cleanedText.length;
 
-    if (formattedText.length >= 4 && formattedText[2] != ',') {
-      formattedText = formattedText.substring(0, 3) +
-          ',' +
-          formattedText.substring(2, formattedText.length);
-    }
-
+  if (textLength <= 3) {
     return TextEditingValue(
-      text: formattedText,
-      selection: TextSelection.collapsed(offset: formattedText.length),
+      text: cleanedText,
+      selection: TextSelection.collapsed(offset: textLength),
     );
   }
+
+  int decimalIndex = textLength - 2;
+  String formattedText =
+      cleanedText.substring(0, decimalIndex) + ',' + cleanedText.substring(decimalIndex);
+
+  return TextEditingValue(
+    text: formattedText,
+    selection: TextSelection.collapsed(offset: formattedText.length),
+  );
 }
+}
+

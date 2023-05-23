@@ -213,11 +213,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                 margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
                 child: TextField(
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
-                    WeightInputFormatter(), // Classe de formatação personalizada para o peso
-                  ],
+                  inputFormatters: [WeightInputFormatter()],
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
                     labelText: "Peso (kg)",
@@ -234,7 +230,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(55, 0, 50, 25),
+                    padding: const EdgeInsets.fromLTRB(55, 10, 50, 25),
                     child: Text(
                       'Tipo sanguíneo',
                       style: TextStyle(fontSize: 16.0),
@@ -250,6 +246,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                     },
                     items: tiposSangue.map((String value) {
                       return DropdownMenuItem<String>(
+                        alignment: Alignment.center,
                         value: value,
                         child: Text(value),
                       );
@@ -294,13 +291,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                           tipoSangue: tipossangue!,
                           substancias: substancias.text,
                         );
-                        saveUserDonatorData(donatorData);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    LoginDonator(donatorData: donatorData)));
-                        print("Valor iserido: " + email.text);
+                        saveUserDonatorData(donatorData, context);
                       },
                     ),
                   ),
