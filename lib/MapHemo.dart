@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:hemocentro1/LoginDonator.dart';
 import 'package:hemocentro1/main.dart';
-import 'shared/libs.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+
+
+Future<void> fetchAmenities() async {
+  final response = await http.get(Uri.parse('https://overpass-api.de/api/interpreter?data=[out:json];node(around:1000,latitude,longitude)[amenity];out;'));
+
+  if (response.statusCode == 200) {
+    // Processar a resposta JSON
+    final json = jsonDecode(response.body);
+
+  } else {
+
+    print('Erro na solicitação: ${response.statusCode}');
+  }
+}
+
 
 class MapHemo extends StatelessWidget {
   @override
@@ -23,6 +39,7 @@ class MapHemo extends StatelessWidget {
         title: "Localização de Hemocentros Próximos",
         home: Scaffold(
           appBar: AppBar(
+
             title: Text("Localização de Hemocentros Próximos"),
           ),
           body:
@@ -44,7 +61,7 @@ class MapHemo extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+        ),
         ),
     );
   }

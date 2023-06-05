@@ -19,6 +19,7 @@ import 'shared/constants.dart';
 import 'package:hemocentro1/firebase_options.dart';
 
 final databaseReference = FirebaseDatabase.instance.reference();
+bool valido = false;
 
 class DonatorData {
   final String email;
@@ -46,9 +47,101 @@ class DonatorData {
   });
 }
 
+void validateData(DonatorData userData, BuildContext context) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference usersCollection = firestore.collection('userdonate');
+
+  if (int.parse(userData.idade) > 69 || int.parse(userData.idade) < 16)
+  {
+    valido = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('A sua idade deve ser entre 16 e 69 para realiar uma doação.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  else if (int.parse(userData.peso) < 50)
+  {
+    valido = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('Você tem que pesar mais de 50kg para poder realizar uma doação'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  else if (userData.substancias == "Sim")
+  {
+    valido = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('Você não pode usar substâncias ilícitas para realizar uma doação.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  else if ((userData.cpf).length <= 13)
+  {
+    valido = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('Está faltando digitos no CPF.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Fechar o diálogo
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  else
+    {
+      valido = true;
+    }
+}
+
 void saveUserDonatorData(DonatorData userData, BuildContext context) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userdonate');
+
+  validateData(userData, context);
 
   if (userData.nome != "" &&
       userData.email != "" &&
@@ -57,8 +150,7 @@ void saveUserDonatorData(DonatorData userData, BuildContext context) async {
       userData.senha != "" &&
       userData.endereco != "" &&
       userData.cpf != "" &&
-      userData.peso != "" &&
-      userData.substancias != "") {
+      userData.peso != "" && valido == true) {
     try {
       await usersCollection.add({
         'nome': userData.nome,
@@ -77,18 +169,16 @@ void saveUserDonatorData(DonatorData userData, BuildContext context) async {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  LoginDonator(donatorData: userData)));
+              builder: (context) => LoginDonator(donatorData: userData)));
     } catch (error) {
       print('Erro ao salvar os dados do usuário doador: $error');
     }
-  }
-  else {
+  } else {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('Algum campo foi deixado vazio.'),
+          content: Text('Algum campo foi deixado vazio ou inválido.'),
           actions: [
             TextButton(
               child: Text('OK'),
@@ -129,7 +219,7 @@ void loginValidationDonator(TextEditingController emailwritten,
             endereco: userData['endereço'],
             cpf: userData['cpf'],
             peso: userData['peso'],
-            tipoSangue: userData['tipo_sanguinio'],
+            tipoSangue: userData['tipo_sanguineo'],
             substancias: userData['substancias'],
           );
           Navigator.push(

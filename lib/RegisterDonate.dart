@@ -22,8 +22,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
   final endereco = TextEditingController();
   final cpf = TextEditingController();
   final peso = TextEditingController();
-  final substancias = TextEditingController();
-  bool elegivel = false;
+  bool elegivel = true;
   bool _isCheckedF = false;
   bool _isCheckedM = true;
 
@@ -39,7 +38,15 @@ class _RegisterDonateState extends State<RegisterDonate> {
     'AB-',
     'O+',
     'O-',
-  ]; // Lista de tipos de sangue
+  ];
+
+  String? substancias =
+      "Sim"; // Variável para armazenar o tipo de sangue selecionado
+
+  List<String> Substancias = [
+    'Sim',
+    'Não',
+  ]; //// Lista de tipos de sangue
 
   TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
@@ -80,7 +87,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
               Container(
                 //Campo para registrar a senha
                 margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
-                child: TextField(
+                child: TextFormField(
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
@@ -188,6 +195,23 @@ class _RegisterDonateState extends State<RegisterDonate> {
                 ),
               ),
               Container(
+                //Campo para registrar o endereço
+                margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                child: TextField(
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10.0),
+                    labelText: "Endereço",
+                  ),
+                  maxLength: 30,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  controller: endereco,
+                ),
+              ),
+              Container(
                 //Campo para registrar o CPF
                 margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
                 child: TextField(
@@ -254,8 +278,34 @@ class _RegisterDonateState extends State<RegisterDonate> {
                   ),
                 ],
               ),
-              DefaultTextFields.getTextField(
-                  'Utiliza alguma substância ilicita?', substancias),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(55, 10, 50, 25),
+                    child: Text(
+                      'Utilia alguma substância ilícita?',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ),
+                  DropdownButton<String>(
+                    value: substancias,
+                    hint: Text('Selecione'),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        substancias = newValue;
+                      });
+                    },
+                    items: Substancias.map((String value) {
+                      return DropdownMenuItem<String>(
+                        alignment: Alignment.center,
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -289,7 +339,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                           cpf: cpf.text,
                           peso: peso.text,
                           tipoSangue: tipossangue!,
-                          substancias: substancias.text,
+                          substancias: substancias!,
                         );
                         saveUserDonatorData(donatorData, context);
                       },
