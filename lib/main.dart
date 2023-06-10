@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:hemocentro1/LoginDonator.dart';
-import 'package:hemocentro1/LoginHemocenter.dart';
 import 'package:hemocentro1/RegisterDonate.dart';
+import 'package:hemocentro1/ResetPassword.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/donatorData.dart';
 import 'package:hemocentro1/hemoData.dart';
@@ -15,8 +12,6 @@ import 'package:hemocentro1/MapHemo.dart';
 
 import '../services/remote_service.dart';
 import '../models/post.dart';
-import '../shared/libs.dart';
-import '../shared/constants.dart';
 import 'package:hemocentro1/firebase_options.dart';
 
 //flutter build appbundle
@@ -195,9 +190,31 @@ class _HomePage extends State<HomePage> {
                       }
                     }),
               ),
-              const Text('Primeiro acesso?',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                  textAlign: TextAlign.center),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                        TextButton(
+                          child: const Text('Primeiro acesso?',
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              textAlign: TextAlign.center),
+                          onPressed: ()=> {}
+                        ),
+                        TextButton(
+                          child: const Text(
+                              'Esqueceu senha?',
+                              style: TextStyle(fontSize: 20),
+                              textAlign: TextAlign.center
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ResetPassword()));
+                            //signup screen
+                          },
+                        ),
+                  ]
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
