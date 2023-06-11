@@ -42,10 +42,12 @@ dependencies:
   cloud_firestore: ^4.7.1
   intl: ^0.17.0
   date_utils: ^0.2.0
-  flutter_map: ^0.14.0
   latlng: any
-  webview_flutter: ^4.2.1
+  webview_flutter: ^3.0.4
   url_launcher: ^6.1.11
+  geolocator: ^7.6.2
+  permission_handler: ^10.3.0
+
 
 dev_dependencies:
   flutter_test:

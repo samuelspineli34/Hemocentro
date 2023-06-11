@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hemocentro1/MapHemo.dart';
-import 'shared/libs.dart';
 import 'package:hemocentro1/main.dart';
-import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/donatorData.dart';
-import 'package:date_utils/date_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 String data2 = "";
 String data = getCurrentDate();
@@ -83,7 +79,10 @@ class LoginDonator extends StatelessWidget {
                             child: const Text('Mapa Hemocentro',
                                 textAlign: TextAlign.center),
                             onPressed: () {
-                                launchUrl(Uri.parse("https://www.google.com.br/maps/dir/-19.9235347,-43.9929218/-19.900419001851425,+-43.97433182630628/"));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MapHemo(donatorData: donatorData)));
                             }),
                       ),
                       Container(

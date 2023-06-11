@@ -6,6 +6,19 @@ import 'package:hemocentro1/hemoData.dart';
 import 'package:flutter/services.dart';
 import 'package:hemocentro1/dataInputs.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'dart:math';
+
+// Função para gerar latitude aleatória
+double generateRandomLatitude({double min = -90, double max = 90}) {
+  final random = Random();
+  return min + random.nextDouble() * (max - min);
+}
+
+// Função para gerar longitude aleatória
+double generateRandomLongitude({double min = -180, double max = 180}) {
+  final random = Random();
+  return min + random.nextDouble() * (max - min);
+}
 
 class RegisterHemocenter extends StatefulWidget {
   @override
@@ -21,6 +34,8 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
   final confirmarsenha = TextEditingController();
   final endereco = TextEditingController();
   final cnpj = TextEditingController();
+  final double lat = generateRandomLatitude();
+  final double long = generateRandomLongitude();
   bool elegivel = false;
 
   TextField padrao(TextEditingController controlador, String templateField) {
@@ -159,6 +174,8 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                           senha: senha.text,
                           endereco: endereco.text,
                           cnpj: cnpj.text,
+                          lat: lat.toString(),
+                          long: long.toString(),
                         );
                         saveUserHemoData(hemoData, context);
                       },

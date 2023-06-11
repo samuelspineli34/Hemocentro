@@ -2,67 +2,131 @@ import 'package:flutter/material.dart';
 import 'package:hemocentro1/LoginDonator.dart';
 import 'package:hemocentro1/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:hemocentro1/donatorData.dart';
 import 'dart:convert';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
+double latitude = 0.0;
+double longitude = 0.0;
 
-Future<void> fetchAmenities() async {
-  final response = await http.get(Uri.parse('https://overpass-api.de/api/interpreter?data=[out:json];node(around:1000,latitude,longitude)[amenity];out;'));
+void requestLocationPermission() async {
+  PermissionStatus permissionStatus = await Permission.location.request();
 
-  if (response.statusCode == 200) {
-    // Processar a resposta JSON
-    final json = jsonDecode(response.body);
-
-  } else {
-
-    print('Erro na solicitação: ${response.statusCode}');
+  if (permissionStatus.isGranted) {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    latitude = position.latitude;
+    longitude = position.longitude;
+  } else if (permissionStatus.isDenied) {
+    // A permissão foi negada pelo usuário. Você pode exibir uma mensagem informando a necessidade da permissão.
+  } else if (permissionStatus.isPermanentlyDenied) {
+    // A permissão foi negada permanentemente pelo usuário. Você pode exibir uma mensagem direcionando o usuário para as configurações do dispositivo para conceder a permissão manualmente.
   }
 }
 
+class MapHemo extends StatefulWidget {
+  final DonatorData donatorData;
 
-class MapHemo extends StatelessWidget {
+  MapHemo({required this.donatorData});
+
   @override
-  final email = TextEditingController();
-  final nome = TextEditingController();
-  final senha = TextEditingController();
-  final endereco = TextEditingController();
-  final cnpj = TextEditingController();
+  _MapHemoState createState() => _MapHemoState(donatorData: donatorData);
+}
 
-  TextField padrao(TextEditingController controlador, String templateField) {
-    return TextField(
-      controller: controlador,
-    );
+class _MapHemoState extends State<MapHemo>
+{
+  final DonatorData donatorData;
+  _MapHemoState({required this.donatorData});
+
+  late Future<String> latitude;
+  late Future<String> longitude;
+
+  @override
+  void initState() {
+    super.initState();
+    requestLocationPermission();
+    latitude = getCurrentLatitude();
+    longitude = getCurrentLongitude();
   }
 
+  Future<String> getCurrentLatitude() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    return position.latitude.toString();
+  }
+
+  Future<String> getCurrentLongitude() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    return position.longitude.toString();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Localização de Hemocentros Próximos",
-        home: Scaffold(
-          appBar: AppBar(
-
-            title: Text("Localização de Hemocentros Próximos"),
-          ),
-          body:
-          Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: ElevatedButton(
-                      child:
-                      const Text('Voltar', textAlign: TextAlign.center),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainPage()));
-                        print("Valor iserido: " + email.text);
+      title: "Localização de Hemocentros Próximos",
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Localização de Hemocentros"),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FutureBuilder<String>(
+                future: latitude,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final lat = snapshot.data!;
+                    return FutureBuilder<String>(
+                      future: longitude,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final long = snapshot.data!;
+                          return Container(
+                            width: 500,
+                            height: 500,
+                            child: WebView(
+                              initialUrl:
+                              "https://www.google.com.br/maps/dir/$lat,$long/-19.900419001851425,+-43.97433182630628/",
+                              javascriptMode: JavascriptMode.unrestricted,
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("Erro ao obter a longitude");
+                        }
+                        return CircularProgressIndicator();
                       },
-                    ),
-                  ),
-                ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("Erro ao obter a latitude");
+                  }
+                  return CircularProgressIndicator();
+                },
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(80, 0, 80, 10),
+                child: ElevatedButton(
+                    child: const Text('Voltar', textAlign: TextAlign.center),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginDonator(donatorData: donatorData),
+                        ),
+                      );
+                    }),
+              ),
+            ],
+          ),
         ),
-        ),
+      ),
     );
   }
 }
+

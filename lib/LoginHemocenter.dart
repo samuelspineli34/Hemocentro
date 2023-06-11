@@ -31,7 +31,30 @@ class _LoginHemocenter extends State<LoginHemocenter> {
     'AB-',
     'O+',
     'O-',
-  ]; // Lista de tipos de sangue
+  ]; // Lista de tipos de
+  List<String> tiposSangueSelecionados = [];
+
+  ListView.builder(
+  itemCount: tiposSangue.length,
+  itemBuilder: (BuildContext context, int index) {
+  final tipoSangue = tiposSangue[index];
+  final isChecked = tiposSangueSelecionados.contains(tipoSangue);
+
+  return CheckboxListTile(
+  title: Text(tipoSangue),
+  value: isChecked,
+  onChanged: (bool? newValue) {
+  setState(() {
+  if (newValue == true) {
+  tiposSangueSelecionados.add(tipoSangue);
+  } else {
+  tiposSangueSelecionados.remove(tipoSangue);
+  }
+  });
+  },
+  );
+  },
+  );
 
   TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
@@ -54,29 +77,17 @@ class _LoginHemocenter extends State<LoginHemocenter> {
               Text('Endereço: ' + hemoData.endereco),
               Text('CNPJ: ' + hemoData.cnpj),
               Text('Tipos sanguineos necessitados: '),
-              DropdownButton<String>(
-                value: tipossangue,
-                hint: Text('Selecione'),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    tipossangue = newValue;
-                  });
-                },
-                items: tiposSangue.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              /*MultiSelectDialogField(
-                items: _animals.map((e) => MultiSelectItem(e, e.name)).toList(),
-                listType: MultiSelectListType.CHIP,
-                onConfirm: (values) {
-                  _selectedAnimals = values;
-                },
-              ),*/
-
+    CheckboxListTile(
+    title: Text(tiposSangue),
+    value: isChecked,
+    onChanged: (bool? newValue) {
+    setState(() {
+    if (newValue == true) {
+    tiposSangueSelecionados.add(tipoSangue);
+    } else {
+    tiposSangueSelecionados.remove(tipoSangue);
+    }
+    });
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

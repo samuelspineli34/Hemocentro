@@ -64,7 +64,6 @@ class _MainPageState extends State<MainPage> {
           '/info': (context) => InfoPage(),
           '/registro_doador': (context) => RegisterDonate(),
           '/registro_hemocentro': (context) => RegisterHemocenter(),
-          '/mapa': (context) => MapHemo(),
         },
         home: Scaffold(
             appBar: appBarContent[_currentIndex],

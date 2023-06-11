@@ -25,6 +25,8 @@ class HemoData {
   final String senha;
   final String endereco;
   final String cnpj;
+  final String lat;
+  final String long;
 
   HemoData({
     required this.email,
@@ -32,6 +34,8 @@ class HemoData {
     required this.senha,
     required this.endereco,
     required this.cnpj,
+    required this.lat,
+    required this.long,
   });
 }
 
@@ -51,6 +55,8 @@ void saveUserHemoData(HemoData hemoData, BuildContext context) async{
         'senha': hemoData.senha,
         'endereço': hemoData.endereco,
         'cnpj': hemoData.cnpj,
+        'lat': hemoData.lat,
+        'long': hemoData.long,
       });
       print('Dados do usuário hemocentro salvos com sucesso.');
       Navigator.push(
@@ -103,6 +109,8 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
             senha: userData['senha'],
             endereco: userData['endereço'],
             cnpj: userData['cnpj'],
+            lat: userData['lat'],
+            long: userData['long'],
           );
             Navigator.push(
                 context,
