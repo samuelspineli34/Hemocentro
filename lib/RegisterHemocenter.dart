@@ -176,6 +176,7 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                           cnpj: cnpj.text,
                           lat: lat.toString(),
                           long: long.toString(),
+                          sangue: [],
                         );
                         saveUserHemoData(hemoData, context);
                       },

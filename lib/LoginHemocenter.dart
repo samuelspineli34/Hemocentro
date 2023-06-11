@@ -34,27 +34,6 @@ class _LoginHemocenter extends State<LoginHemocenter> {
   ]; // Lista de tipos de
   List<String> tiposSangueSelecionados = [];
 
-  ListView.builder(
-  itemCount: tiposSangue.length,
-  itemBuilder: (BuildContext context, int index) {
-  final tipoSangue = tiposSangue[index];
-  final isChecked = tiposSangueSelecionados.contains(tipoSangue);
-
-  return CheckboxListTile(
-  title: Text(tipoSangue),
-  value: isChecked,
-  onChanged: (bool? newValue) {
-  setState(() {
-  if (newValue == true) {
-  tiposSangueSelecionados.add(tipoSangue);
-  } else {
-  tiposSangueSelecionados.remove(tipoSangue);
-  }
-  });
-  },
-  );
-  },
-  );
 
   TextField padrao(TextEditingController controlador, String templateField) {
     return TextField(
@@ -64,49 +43,75 @@ class _LoginHemocenter extends State<LoginHemocenter> {
 
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Registro Hemocentro",
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text("Tela registro hemocentro"),
-          ),
-          body: SingleChildScrollView(
-            child: Column(children: <Widget>[
+      title: "Registro Hemocentro",
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Tela registro hemocentro"),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
               Text('E-mail: ' + hemoData.email),
               Text('Nome: ' + hemoData.nome),
               Text('Senha: ' + hemoData.senha),
               Text('Endereço: ' + hemoData.endereco),
               Text('CNPJ: ' + hemoData.cnpj),
-              Text('Tipos sanguineos necessitados: '),
-    CheckboxListTile(
-    title: Text(tiposSangue),
-    value: isChecked,
-    onChanged: (bool? newValue) {
-    setState(() {
-    if (newValue == true) {
-    tiposSangueSelecionados.add(tipoSangue);
-    } else {
-    tiposSangueSelecionados.remove(tipoSangue);
-    }
-    });
+              Text('Tipos sanguíneos necessitados: '),
+              Container (
+                padding: EdgeInsets.fromLTRB(200, 5, 200, 0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: tiposSangue.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final tipoSangue = tiposSangue[index];
+                  final isChecked = tiposSangueSelecionados.contains(tipoSangue);
+
+                  return CheckboxListTile(
+                    title: Text(tipoSangue),
+                    value: isChecked,
+                    onChanged: (bool? newValue) {
+                      setState(() {
+                        if (newValue == true) {
+                          tiposSangueSelecionados.add(tipoSangue);
+                          inserirSangue(tiposSangueSelecionados, hemoData, context);
+                        } else {
+                          tiposSangueSelecionados.remove(tipoSangue);
+                          removerSangue(tipoSangue, hemoData, context);
+                        }
+                      });
+                    },
+                  );
+                },
+              ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
                     child: ElevatedButton(
-                        child: const Text('Sair',
-                            textAlign: TextAlign.center),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainPage()));
-                        }),
+                      child: const Text('Sair', textAlign: TextAlign.center),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainPage()),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
-            ]),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
+
+
+
+
+
+

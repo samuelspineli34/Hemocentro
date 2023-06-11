@@ -27,6 +27,16 @@ class HemoData {
   final String cnpj;
   final String lat;
   final String long;
+  final List<String> sangue = [
+  'A+',
+  'A-',
+  'B+',
+  'B-',
+  'AB+',
+  'AB-',
+  'O+',
+  'O-',
+  ];
 
   HemoData({
     required this.email,
@@ -36,6 +46,7 @@ class HemoData {
     required this.cnpj,
     required this.lat,
     required this.long,
+    required List<String>sangue,
   });
 }
 
@@ -57,6 +68,7 @@ void saveUserHemoData(HemoData hemoData, BuildContext context) async{
         'cnpj': hemoData.cnpj,
         'lat': hemoData.lat,
         'long': hemoData.long,
+        'sangue': hemoData.sangue,
       });
       print('Dados do usuário hemocentro salvos com sucesso.');
       Navigator.push(
@@ -93,6 +105,8 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('userhemo').get();
 
+  String docId = querySnapshot.size.toString();
+
   if (querySnapshot.size > 0) {
     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
       // Acesso aos dados de cada documento individualmente
@@ -102,7 +116,9 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
         // Faça o que for necessário com os dados do usuário
         String email = userData['email'];
         String senha = userData['senha'];
+
         if (email == emailwritten.text && senha == senhawritten.text) {
+          print("Passou confirmação " + email + " " + senha);
           HemoData hemoData = HemoData(
             email: userData['email'],
             nome: userData['nome'],
@@ -111,6 +127,7 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
             cnpj: userData['cnpj'],
             lat: userData['lat'],
             long: userData['long'],
+            sangue: userData['sangue'],
           );
             Navigator.push(
                 context,
@@ -140,5 +157,95 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
         }
       }
     }
+  }
+}
+void inserirSangue(List<String> sangue, HemoData hemoData, BuildContext context) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference usersCollection = firestore.collection('userhemo');
+
+  QuerySnapshot querySnapshot = await usersCollection
+      .where('email', isEqualTo: hemoData.email)
+      .get();
+
+  if (querySnapshot.size > 0) {
+    QueryDocumentSnapshot docSnapshot = querySnapshot.docs[0];
+    String docId = docSnapshot.id;
+
+    // Recuperar o campo 'sangue' como uma String
+    String sangueString = docSnapshot.get('sangue') ?? '';
+
+    // Converter a String em uma lista de tipos de sangue
+    List<String> tiposSangue = sangueString.split(',');
+
+    // Adicionar os elementos da nova lista à lista existente, verificando duplicatas
+    for (String novoSangue in sangue) {
+      if (!tiposSangue.contains(novoSangue)) {
+        tiposSangue.add(novoSangue);
+      }
+    }
+
+    // Atualizar o campo 'sangue' no documento Firestore
+    await usersCollection.doc(docId).update({'sangue': tiposSangue.join(',')});
+
+    // Atualizar o objeto HemoData localmente também
+    HemoData updatedHemoData = HemoData(
+      email: hemoData.email,
+      nome: hemoData.nome,
+      senha: hemoData.senha,
+      endereco: hemoData.endereco,
+      cnpj: hemoData.cnpj,
+      lat: hemoData.lat,
+      long: hemoData.long,
+      sangue: tiposSangue,
+    );
+
+  }
+}
+
+
+
+void removerSangue(String sangue, HemoData hemoData, BuildContext context) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference usersCollection = firestore.collection('userhemo');
+
+  QuerySnapshot querySnapshot = await usersCollection
+      .where('email', isEqualTo: hemoData.email)
+      .get();
+
+  if (querySnapshot.size > 0) {
+    QueryDocumentSnapshot docSnapshot = querySnapshot.docs[0];
+    String docId = docSnapshot.id;
+
+    // Recuperar o campo 'sangue' como uma String
+    String sangueString = docSnapshot.get('sangue') ?? '';
+
+    // Converter a String em uma lista de tipos de sangue
+    List<String> tiposSangue = sangueString.split(',');
+
+// Remover os tipos de sangue selecionados da lista
+    tiposSangue.removeWhere((tipo) => sangue.contains(tipo));
+
+// Atualizar o campo 'sangue' no documento Firestore
+    await usersCollection.doc(docId).update({'sangue': tiposSangue.join(',')});
+
+// Atualizar o objeto HemoData localmente também
+    HemoData updatedHemoData = HemoData(
+      email: hemoData.email,
+      nome: hemoData.nome,
+      senha: hemoData.senha,
+      endereco: hemoData.endereco,
+      cnpj: hemoData.cnpj,
+      lat: hemoData.lat,
+      long: hemoData.long,
+      sangue: tiposSangue,
+    );
+
+// Use o objeto HemoData atualizado como parâmetro para a próxima tela
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginHemocenter(hemoData: updatedHemoData),
+      ),
+    );
   }
 }
