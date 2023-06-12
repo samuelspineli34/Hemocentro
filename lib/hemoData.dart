@@ -10,6 +10,7 @@ import 'package:hemocentro1/LoginHemocenter.dart';
 import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/hemoData.dart';
+import 'package:hemocentro1/main.dart';
 
 import 'services/remote_service.dart';
 import 'models/post.dart';
@@ -135,19 +136,22 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
                     builder: (context) => LoginHemocenter(hemoData: hemoData)));
             //signup screen
         }
-        else {
+        else if (email != emailwritten.text && senha != senhawritten.text){
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: Text(
-                    'E-mail ou senha inválidos.'),
+                content: Text('E-mail ou senha inválidos.'),
                 actions: [
                   TextButton(
                     child: Text('OK'),
                     onPressed: () {
-                      Navigator.of(context)
-                          .pop(); // Fechar o diálogo
+                      Navigator.of(context).pop(); // Fechar o diálogo
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MainPage()));
                     },
                   ),
                 ],

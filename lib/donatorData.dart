@@ -32,6 +32,7 @@ class DonatorData {
   final String peso;
   final String tipoSangue;
   final String substancias;
+  final DateTime data;
 
   DonatorData({
     required this.email,
@@ -44,6 +45,7 @@ class DonatorData {
     required this.peso,
     required this.tipoSangue,
     required this.substancias,
+    required this.data,
   });
 }
 
@@ -163,6 +165,7 @@ void saveUserDonatorData(DonatorData userData, BuildContext context) async {
         'peso': userData.peso,
         'tipo_sanguineo': userData.tipoSangue,
         'substancias': userData.substancias,
+        'data': userData.data,
       });
 
       print('Dados do usuário doador salvos com sucesso.');
@@ -221,6 +224,7 @@ void loginValidationDonator(TextEditingController emailwritten,
             peso: userData['peso'],
             tipoSangue: userData['tipo_sanguineo'],
             substancias: userData['substancias'],
+            data: userData['data'],
           );
           Navigator.push(
               context,
@@ -228,7 +232,7 @@ void loginValidationDonator(TextEditingController emailwritten,
                   builder: (context) =>
                       LoginDonator(donatorData: donatorData)));
           //signup screen
-        } else {
+        } else if (email != emailwritten.text && senha != senhawritten.text){
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -239,6 +243,11 @@ void loginValidationDonator(TextEditingController emailwritten,
                     child: Text('OK'),
                     onPressed: () {
                       Navigator.of(context).pop(); // Fechar o diálogo
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MainPage()));
                     },
                   ),
                 ],

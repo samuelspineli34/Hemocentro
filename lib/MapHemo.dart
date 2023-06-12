@@ -12,6 +12,9 @@ import 'package:permission_handler/permission_handler.dart';
 double latitude = 0.0;
 double longitude = 0.0;
 
+double lathemo = 0.0;
+double longhemo = 0.0;
+
 void requestLocationPermission() async {
   PermissionStatus permissionStatus = await Permission.location.request();
 
@@ -93,7 +96,7 @@ class _MapHemoState extends State<MapHemo>
                             height: 500,
                             child: WebView(
                               initialUrl:
-                              "https://www.google.com.br/maps/dir/$lat,$long/-19.900419001851425,+-43.97433182630628/",
+                              "https://www.google.com.br/maps/dir/$lat,$long/$lathemo,$longhemo/",
                               javascriptMode: JavascriptMode.unrestricted,
                             ),
                           );
