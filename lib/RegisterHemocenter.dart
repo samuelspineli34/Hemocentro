@@ -9,13 +9,13 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'dart:math';
 
 // Função para gerar latitude aleatória
-double generateRandomLatitude({double min = -90, double max = 90}) {
+double generateRandomLatitude({double min = 37, double max = 38}) {
   final random = Random();
   return min + random.nextDouble() * (max - min);
 }
 
 // Função para gerar longitude aleatória
-double generateRandomLongitude({double min = -180, double max = 180}) {
+double generateRandomLongitude({double min = -121, double max = -122}) {
   final random = Random();
   return min + random.nextDouble() * (max - min);
 }

@@ -10,6 +10,7 @@ import 'package:hemocentro1/LoginHemocenter.dart';
 import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/hemoData.dart';
+import 'package:hemocentro1/main.dart';
 
 import 'services/remote_service.dart';
 import 'models/post.dart';
@@ -135,19 +136,22 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
                     builder: (context) => LoginHemocenter(hemoData: hemoData)));
             //signup screen
         }
-        else {
+        else if (email != emailwritten.text && senha != senhawritten.text){
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: Text(
-                    'E-mail ou senha inválidos.'),
+                content: Text('E-mail ou senha inválidos.'),
                 actions: [
                   TextButton(
                     child: Text('OK'),
                     onPressed: () {
-                      Navigator.of(context)
-                          .pop(); // Fechar o diálogo
+                      Navigator.of(context).pop(); // Fechar o diálogo
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MainPage()));
                     },
                   ),
                 ],
@@ -159,6 +163,49 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
     }
   }
 }
+
+Future<String> getHemocenterLatitude(String sangue) async {
+  QuerySnapshot querySnapshot =
+  await FirebaseFirestore.instance.collection('userhemo').get();
+
+  for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+    Map<String, dynamic>? userData =
+    docSnapshot.data() as Map<String, dynamic>?;
+
+    if (userData != null) {
+      String sangueHemocentro = userData['sangue'].toString();
+
+        String latitude = userData['lat'].toString();
+        print("lathemo: " + latitude.toString());
+        return latitude.toString();
+    }
+  }
+
+  return "0.00";
+}
+
+Future<String> getHemocenterLongitude(String sangue) async {
+  QuerySnapshot querySnapshot =
+  await FirebaseFirestore.instance.collection('userhemo').get();
+
+  for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+    Map<String, dynamic>? userData =
+    docSnapshot.data() as Map<String, dynamic>?;
+
+    if (userData != null) {
+      String sangueHemocentro = userData['sangue'].toString();
+
+        String longitude = userData['long'].toString();
+        print("longhemo: " + longitude.toString());
+        return longitude.toString();
+    }
+  }
+
+  return "0.00";
+}
+
+
+
 void inserirSangue(List<String> sangue, HemoData hemoData, BuildContext context) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userhemo');

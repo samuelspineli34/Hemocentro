@@ -25,6 +25,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
   bool elegivel = true;
   bool _isCheckedF = false;
   bool _isCheckedM = true;
+  final DateTime data = DateTime.now();
 
   String? tipossangue =
       "A+"; // Variável para armazenar o tipo de sangue selecionado
@@ -282,7 +283,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(55, 10, 50, 25),
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 25),
                     child: Text(
                       'Utilia alguma substância ilícita?',
                       style: TextStyle(fontSize: 16.0),
@@ -340,6 +341,7 @@ class _RegisterDonateState extends State<RegisterDonate> {
                           peso: peso.text,
                           tipoSangue: tipossangue!,
                           substancias: substancias!,
+                          data: DateTime.now()
                         );
                         saveUserDonatorData(donatorData, context);
                       },

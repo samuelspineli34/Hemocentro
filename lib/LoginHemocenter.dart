@@ -58,7 +58,7 @@ class _LoginHemocenter extends State<LoginHemocenter> {
               Text('CNPJ: ' + hemoData.cnpj),
               Text('Tipos sanguíneos necessitados: '),
               Container (
-                padding: EdgeInsets.fromLTRB(200, 5, 200, 0),
+                padding: EdgeInsets.fromLTRB(150, 5, 150, 0),
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

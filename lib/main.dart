@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 import 'package:hemocentro1/LoginDonator.dart';
 import 'package:hemocentro1/LoginHemocenter.dart';
 import 'package:hemocentro1/RegisterDonate.dart';
@@ -19,7 +20,14 @@ import '../shared/libs.dart';
 import '../shared/constants.dart';
 import 'package:hemocentro1/firebase_options.dart';
 
-//flutter build appbundle
+//npm config set strict-ssl false
+//npm install -g firebase-tools
+//firebase login
+//dart pub global activate flutterfire_cli
+//O firebase/flutterfire não estão nas variáveis de ambiente dos lab.
+//Necessário enviar para a pasta do projeto Flutter
+//flutterfire configure --project=hemocentro-40c12
+//flutter build appbundlecd
 //flutter run --multidex
 //flutter --web-renderer html
 //Usar versão android 12.0 no emulador
