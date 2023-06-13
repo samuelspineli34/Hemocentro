@@ -1,22 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:hemocentro1/LoginDonator.dart';
-import 'package:hemocentro1/LoginHemocenter.dart';
-import 'package:hemocentro1/RegisterDonate.dart';
-import 'package:hemocentro1/RegisterHemocenter.dart';
-import 'package:hemocentro1/hemoData.dart';
 import 'package:hemocentro1/main.dart';
-
-import 'services/remote_service.dart';
-import 'models/post.dart';
-import 'shared/libs.dart';
-import 'shared/constants.dart';
-import 'package:hemocentro1/firebase_options.dart';
 
 final databaseReference = FirebaseDatabase.instance.reference();
 bool valido = false;
@@ -31,19 +16,19 @@ class ResetData {
   });
 }
 
-
 void saveUserDonatorData(ResetData resetData, BuildContext context) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userdonate');
+
   if (
       resetData.email != "" &&
       resetData.senha != ""
       ) {
     try {
-      await usersCollection.add({
+      /*await usersCollection.doc("aaa")update(){
        'email': resetData.email,
-        'senha': resetData.senha,
-      });
+       'senha': resetData.senha,
+      });*/
 
       print('Dados do usuário doador salvos com sucesso.');
       Navigator.push(
@@ -74,12 +59,18 @@ void saveUserDonatorData(ResetData resetData, BuildContext context) async {
 }
 
 void loginValidationDonator(TextEditingController emailwritten,
-    TextEditingController senhawritten, BuildContext context) async {
-  QuerySnapshot querySnapshot =
+  TextEditingController senhawritten, BuildContext context) async {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  CollectionReference usersCollection = firestore.collection('userdonate');
+
+  print(usersCollection.);
+
+  QuerySnapshot querySnapshotDonate =
   await FirebaseFirestore.instance.collection('userdonate').get();
 
-  if (querySnapshot.size > 0) {
-    for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+  if (querySnapshotDonate.size > 0) {
+    for (QueryDocumentSnapshot docSnapshot in querySnapshotDonate.docs) {
       // Acesso aos dados de cada documento individualmente
       Map<String, dynamic>? userData =
       docSnapshot.data() as Map<String, dynamic>?;
@@ -89,16 +80,19 @@ void loginValidationDonator(TextEditingController emailwritten,
         String email = userData['email'];
         String senha = userData['senha'];
 
-        if (email == emailwritten.text && senha == senhawritten.text) {
+        if (email == emailwritten.text && senha != senhawritten.text) {
           ResetData resetData = ResetData(
             email: userData['email'],
             senha: userData['senha'],
           );
+
+          await usersCollection.doc('49ImmJ4NcrEGfdZdw4yH').update(userData);
+
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      HomePage()));
+                      MainPage()));
           //signup screen
         } else {
           showDialog(

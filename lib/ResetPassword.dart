@@ -27,10 +27,10 @@ class _ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Registro Doador",
+        title: "Alterar senha",
         home: Scaffold(
           appBar: AppBar(
-            title: Text("Tela registro doador"),
+            title: Text("Tela alterar senha"),
           ),
           body:
           SingleChildScrollView(
