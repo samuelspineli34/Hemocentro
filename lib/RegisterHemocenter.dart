@@ -9,13 +9,13 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'dart:math';
 
 // Função para gerar latitude aleatória
-double generateRandomLatitude({double min = -90, double max = 90}) {
+double generateRandomLatitude({double min = 37, double max = 38}) {
   final random = Random();
   return min + random.nextDouble() * (max - min);
 }
 
 // Função para gerar longitude aleatória
-double generateRandomLongitude({double min = -180, double max = 180}) {
+double generateRandomLongitude({double min = -121, double max = -122}) {
   final random = Random();
   return min + random.nextDouble() * (max - min);
 }
@@ -48,20 +48,64 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
     return MaterialApp(
         title: "Registro Hemocentro",
         home: Scaffold(
-          appBar: AppBar(
-            title: Text("Tela registro hemocentro"),
+          appBar:  AppBar(
+            leading: IconButton(onPressed: (){}, icon: Icon(Icons.bloodtype)),
+            backgroundColor: const Color(0xFFD32F2F),
+            title: const Text('Tela de registro hemocentro'),
+            elevation: 0,
           ),
           body: SingleChildScrollView(
             child: Column(children: <Widget>[
-              DefaultTextFields.getTextField('Nome da Instituição', nome),
-              DefaultTextFields.getTextField('E-mail', email),
+              Container(
+                margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                child: TextField(
+                  decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      labelText: 'Nome da instituição',
+                      labelStyle: TextStyle(
+                          color: Color(0xFFD32F2F), fontSize: 20)),
+                  maxLength: 30,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  controller: nome,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                child: TextField(
+                  decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      labelText: 'E-mail',
+                      labelStyle: TextStyle(
+                          color: Color(0xFFD32F2F), fontSize: 20)),
+                  maxLength: 30,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  controller: email,
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
                 child: TextField(
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    labelText: "Senha",
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      labelText: 'Senha',
+                      labelStyle: TextStyle(color: Color(0xFFD32F2F),
+                          fontSize: 20),
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -90,8 +134,13 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                 child: TextField(
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    labelText: "Confirmar Senha",
+                    enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                    focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                    labelText: 'Confirmar Senha',
+                    labelStyle: TextStyle(color: Color(0xFFD32F2F),
+                        fontSize: 20),
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -118,19 +167,41 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                   },
                 ),
               ),
-              DefaultTextFields.getTextField('Endereco', endereco),
+              Container(
+                margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
+                child: TextField(
+                  decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      labelText: 'Endereço',
+                      labelStyle: TextStyle(
+                          color: Color(0xFFD32F2F), fontSize: 20)),
+                  maxLength: 30,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                  controller: endereco,
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.fromLTRB(50, 0, 50, 25),
                 child: TextField(
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
-                    CnpjInputFormatter(), // Classe de formatação personalizada para o CPF
+                    CnpjInputFormatter(), // Classe de formatação personalizada para o CNPJ
                   ],
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10.0),
-                    labelText: "CNPJ",
-                  ),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFD32F2F))),
+                      labelText: 'CNPJ',
+                      labelStyle: TextStyle(
+                          color: Color(0xFFD32F2F), fontSize: 20)),
                   maxLength: 18,
                   style: TextStyle(
                     fontSize: 20,
@@ -153,6 +224,7 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 10, 100, 0),
                     child: ElevatedButton(
+                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFD32F2F))),
                         child:
                             const Text('Voltar', textAlign: TextAlign.center),
                         onPressed: () {
@@ -165,8 +237,8 @@ class _RegisterHemocenter extends State<RegisterHemocenter> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: ElevatedButton(
-                      child:
-                          const Text('Cadastrar', textAlign: TextAlign.center),
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFD32F2F))),
+                      child: const Text('Cadastrar', textAlign: TextAlign.center),
                       onPressed: () {
                         HemoData hemoData = HemoData(
                           email: email.text,

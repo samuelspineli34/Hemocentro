@@ -45,20 +45,126 @@ class _LoginHemocenter extends State<LoginHemocenter> {
     return MaterialApp(
       title: "Registro Hemocentro",
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("Tela registro hemocentro"),
+        endDrawer: Drawer(child: ListView(
+          // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+        const DrawerHeader(
+        decoration: BoxDecoration(
+        color: Color(0xFFD32F2F),
+        ),
+        child: Text('Configurações',style: TextStyle(fontSize: 20)),
+      ),
+        ListTile(
+          title: const Text('Alterar dados',style: TextStyle(fontSize: 20)),
+          onTap: () {
+            // Update the state of the app.
+            // ...
+          },
+        ),
+        ListTile(
+            title: const Text('Sair',style: TextStyle(fontSize: 20)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainPage(),
+                ),
+              );
+            }
+        )
+    ],
+    ),
+    ),
+        appBar:  AppBar(
+          leading: IconButton(onPressed: (){}, icon: Icon(Icons.bloodtype)),
+          backgroundColor: const Color(0xFFD32F2F),
+          title: const Text('Informações do hemocentro'),
+          elevation: 0,
         ),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text('E-mail: ' + hemoData.email),
-              Text('Nome: ' + hemoData.nome),
-              Text('Senha: ' + hemoData.senha),
-              Text('Endereço: ' + hemoData.endereco),
-              Text('CNPJ: ' + hemoData.cnpj),
-              Text('Tipos sanguíneos necessitados: '),
+              Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      border: Border.all(
+                        color: Color(0xFFD32F2F),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFD32F2F), Colors.red],
+                      )),
+                  margin: const EdgeInsets.fromLTRB(0,15,0,15),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                      children: [
+                        IconButton(onPressed: (){}, icon: Icon(Icons.mail)),
+                        Text('E-mail: ' + hemoData.email,
+                            style: TextStyle(fontSize: 20, ))])
+              ),
+              Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      border: Border.all(
+                        color: Color(0xFFD32F2F),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFD32F2F), Colors.red],
+                      )),
+                  margin: const EdgeInsets.fromLTRB(0,15,0,15),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                      children: [
+                        IconButton(onPressed: (){}, icon: Icon(Icons.card_membership)), Text('Nome: ' + hemoData.nome,
+                            style: TextStyle(fontSize: 20)),])
+              ),
+              Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      border: Border.all(
+                        color: Color(0xFFD32F2F),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFD32F2F), Colors.red],
+                      )),
+                  margin: const EdgeInsets.fromLTRB(0,15,0,15),
+                  alignment: Alignment.centerLeft,
+                  child:Row(
+                      children: [
+                        IconButton(onPressed: (){}, icon: Icon(Icons.map)), Text('Endereço: ' + hemoData.endereco,
+                            style: TextStyle(fontSize: 20)),])
+              ),
+              Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.white70,
+                      border: Border.all(
+                        color: Color(0xFFD32F2F),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFD32F2F), Colors.red],
+                      )),
+                  margin: const EdgeInsets.fromLTRB(0,15,0,15),
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                      children: [
+                        IconButton(onPressed: (){}, icon: Icon(Icons.perm_identity)),Text('CNPJ: ' + hemoData.cnpj,
+                            style: TextStyle(fontSize: 20)),])
+              ),
+              Text('Tipos sanguíneos necessitados: ', style: TextStyle(fontSize: 20)),
               Container (
-                padding: EdgeInsets.fromLTRB(200, 5, 200, 0),
+                padding: EdgeInsets.fromLTRB(130, 5, 150, 0),
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -68,7 +174,8 @@ class _LoginHemocenter extends State<LoginHemocenter> {
                   final isChecked = tiposSangueSelecionados.contains(tipoSangue);
 
                   return CheckboxListTile(
-                    title: Text(tipoSangue),
+                    activeColor: Color(0xFFD32F2F),
+                    title: Text(tipoSangue, style: TextStyle(fontSize: 20)),
                     value: isChecked,
                     onChanged: (bool? newValue) {
                       setState(() {
@@ -91,6 +198,7 @@ class _LoginHemocenter extends State<LoginHemocenter> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(100, 10, 100, 0),
                     child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFD32F2F))),
                       child: const Text('Sair', textAlign: TextAlign.center),
                       onPressed: () {
                         Navigator.push(
