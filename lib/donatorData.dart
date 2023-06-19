@@ -11,6 +11,8 @@ import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/hemoData.dart';
 import 'package:hemocentro1/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 import 'services/remote_service.dart';
 import 'models/post.dart';
@@ -225,7 +227,8 @@ void loginValidationDonator(TextEditingController emailwritten,
             peso: userData['peso'],
             tipoSangue: userData['tipo_sanguineo'],
             substancias: userData['substancias'],
-            data: userData['data'],
+            data: (userData['data'] as Timestamp).toDate(),
+
           );
           Navigator.push(
               context,

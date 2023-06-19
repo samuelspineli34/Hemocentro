@@ -28,7 +28,7 @@ class HemoData {
   final String cnpj;
   final String lat;
   final String long;
-  final List<String> sangue = [
+  final List<dynamic> sangue = [
   'A+',
   'A-',
   'B+',
@@ -47,7 +47,7 @@ class HemoData {
     required this.cnpj,
     required this.lat,
     required this.long,
-    required List<String>sangue,
+    required List<dynamic>sangue,
   });
 }
 
@@ -106,8 +106,6 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('userhemo').get();
 
-  String docId = querySnapshot.size.toString();
-
   if (querySnapshot.size > 0) {
     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
       // Acesso aos dados de cada documento individualmente
@@ -128,7 +126,7 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
             cnpj: userData['cnpj'],
             lat: userData['lat'],
             long: userData['long'],
-            sangue: userData['sangue'],
+            sangue: userData['sangue']
           );
             Navigator.push(
                 context,
@@ -206,7 +204,7 @@ Future<String> getHemocenterLongitude(String sangue) async {
 
 
 
-void inserirSangue(List<String> sangue, HemoData hemoData, BuildContext context) async {
+void inserirSangue(List<dynamic> sangue, HemoData hemoData, BuildContext context) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userhemo');
 
@@ -222,7 +220,7 @@ void inserirSangue(List<String> sangue, HemoData hemoData, BuildContext context)
     String sangueString = docSnapshot.get('sangue') ?? '';
 
     // Converter a String em uma lista de tipos de sangue
-    List<String> tiposSangue = sangueString.split(',');
+    List<dynamic> tiposSangue = sangueString.split(',');
 
     // Adicionar os elementos da nova lista à lista existente, verificando duplicatas
     for (String novoSangue in sangue) {
@@ -267,7 +265,7 @@ void removerSangue(String sangue, HemoData hemoData, BuildContext context) async
     String sangueString = docSnapshot.get('sangue') ?? '';
 
     // Converter a String em uma lista de tipos de sangue
-    List<String> tiposSangue = sangueString.split(',');
+    List<dynamic> tiposSangue = sangueString.split(',');
 
 // Remover os tipos de sangue selecionados da lista
     tiposSangue.removeWhere((tipo) => sangue.contains(tipo));
