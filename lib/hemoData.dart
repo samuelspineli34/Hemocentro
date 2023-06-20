@@ -117,8 +117,6 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
         // Faça o que for necessário com os dados do usuário
         String email = userData['email'];
         String senha = userData['senha'];
-        List<dynamic>? sangueData = userData['sangue'] as List<dynamic>?;
-        List<String> sangueList = sangueData?.cast<String>() ?? [];
 
         if (email == emailwritten.text && senha == senhawritten.text) {
           print("Passou confirmação " + email + " " + senha);
@@ -126,11 +124,11 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
             email: userData['email'],
             nome: userData['nome'],
             senha: userData['senha'],
-            endereco: userData['endereco'],
+            endereco: userData['endereço'],
             cnpj: userData['cnpj'],
             lat: userData['lat'],
             long: userData['long'],
-            sangue: sangueList,
+            sangue: userData['sangue'],
           );
             Navigator.push(
                 context,

@@ -225,7 +225,7 @@ void loginValidationDonator(TextEditingController emailwritten,
             peso: userData['peso'],
             tipoSangue: userData['tipo_sanguineo'],
             substancias: userData['substancias'],
-            data: (userData['data'] as Timestamp).toDate(),
+            data: userData['data'],
           );
           Navigator.push(
               context,
