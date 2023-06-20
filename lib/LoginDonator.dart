@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hemocentro1/AtualizarDadosDonate.dart';
 import 'package:hemocentro1/MapHemo.dart';
 import 'package:hemocentro1/main.dart';
 import 'package:hemocentro1/donatorData.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:table_calendar/table_calendar.dart';
+
 
 String data2 = "";
 String data = "";
@@ -134,12 +136,15 @@ class LoginDonator extends StatefulWidget {
   LoginDonator({required this.donatorData});
 
   @override
-  _LoginDonatorState createState() => _LoginDonatorState();
+  _LoginDonator createState() => _LoginDonator(donatorData: donatorData);
 }
 
-class _LoginDonatorState extends State<LoginDonator> {
+class _LoginDonator extends State<LoginDonator> {
   List<String> bancos = [];
   DateTime? _selectedDate;
+
+  final DonatorData donatorData;
+  _LoginDonator({required this.donatorData});
 
   @override
   void initState() {
@@ -199,8 +204,10 @@ class _LoginDonatorState extends State<LoginDonator> {
           ListTile(
             title: const Text('Alterar dados',style: TextStyle(fontSize: 20)),
             onTap: () {
-              // Update the state of the app.
-              // ...
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AtualizarDadosDonate(donatorData: donatorData)),
+              );
             },
           ),
           ListTile(
