@@ -2,6 +2,9 @@
 
 Aplicativo de conexão entre hemocentros e doadores.
 
+Samuel Spineli Rodrigues (@samuelspinelli34)
+Henrique Padua (@henriquepadua)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
