@@ -1,6 +1,6 @@
 # Hemocentro
 
-A new Flutter project.
+Aplicativo de conexão entre hemocentros e doadores.
 
 ## Getting Started
 
