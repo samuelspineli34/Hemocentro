@@ -30,7 +30,7 @@ class HemoData {
   final String cnpj;
   final String lat;
   final String long;
-  final List<dynamic> sangue = [
+  final List<String> sangue = [
   'A+',
   'A-',
   'B+',
@@ -49,7 +49,7 @@ class HemoData {
     required this.cnpj,
     required this.lat,
     required this.long,
-    required List<dynamic>sangue,
+    required List<String>sangue,
   });
 }
 
@@ -210,7 +210,7 @@ Future<String> getHemocenterLongitude(String sangue) async {
 
 
 
-void inserirSangue(List<dynamic> sangue, HemoData hemoData, BuildContext context) async {
+void inserirSangue(List<String> sangue, HemoData hemoData, BuildContext context) async {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference usersCollection = firestore.collection('userhemo');
 
@@ -226,7 +226,7 @@ void inserirSangue(List<dynamic> sangue, HemoData hemoData, BuildContext context
     String sangueString = docSnapshot.get('sangue') ?? '';
 
     // Converter a String em uma lista de tipos de sangue
-    List<dynamic> tiposSangue = sangueString.split(',');
+    List<String> tiposSangue = sangueString.split(',');
 
     // Adicionar os elementos da nova lista à lista existente, verificando duplicatas
     for (String novoSangue in sangue) {
@@ -271,7 +271,7 @@ void removerSangue(String sangue, HemoData hemoData, BuildContext context) async
     String sangueString = docSnapshot.get('sangue') ?? '';
 
     // Converter a String em uma lista de tipos de sangue
-    List<dynamic> tiposSangue = sangueString.split(',');
+    List<String> tiposSangue = sangueString.split(',');
 
 // Remover os tipos de sangue selecionados da lista
     tiposSangue.removeWhere((tipo) => sangue.contains(tipo));
