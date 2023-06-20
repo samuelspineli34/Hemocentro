@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hemocentro1/main.dart';
+import 'AtualizarDadosHemocenter.dart';
 import 'shared/libs.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:hemocentro1/hemoData.dart';
@@ -55,13 +56,15 @@ class _LoginHemocenter extends State<LoginHemocenter> {
         ),
         child: Text('Configurações',style: TextStyle(fontSize: 20)),
       ),
-        ListTile(
-          title: const Text('Alterar dados',style: TextStyle(fontSize: 20)),
-          onTap: () {
-            // Update the state of the app.
-            // ...
-          },
-        ),
+              ListTile(
+                title: const Text('Alterar dados', style: TextStyle(fontSize: 20)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AtualizarDadosHemocenter(hemoData: hemoData)),
+                  );
+                },
+              ),
         ListTile(
             title: const Text('Sair',style: TextStyle(fontSize: 20)),
             onTap: () {
@@ -103,7 +106,7 @@ class _LoginHemocenter extends State<LoginHemocenter> {
                       children: [
                         IconButton(onPressed: (){}, icon: Icon(Icons.mail)),
                         Text('E-mail: ' + hemoData.email,
-                            style: TextStyle(fontSize: 20, ))])
+                            style: TextStyle(fontSize: 18, ))])
               ),
               Container(
                   padding: EdgeInsets.all(10),
