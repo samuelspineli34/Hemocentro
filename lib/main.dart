@@ -11,12 +11,9 @@ import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/donatorData.dart';
 import 'package:hemocentro1/hemoData.dart';
-import 'package:hemocentro1/MapHemo.dart';
 
 import '../services/remote_service.dart';
 import '../models/post.dart';
-import '../shared/libs.dart';
-import '../shared/constants.dart';
 import 'package:hemocentro1/firebase_options.dart';
 
 //npm config set strict-ssl false

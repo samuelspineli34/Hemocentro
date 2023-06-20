@@ -20,6 +20,8 @@ import 'package:hemocentro1/firebase_options.dart';
 
 final databaseReference = FirebaseDatabase.instance.reference();
 
+int flag = 0;
+
 class HemoData {
   final String email;
   final String nome;
@@ -106,6 +108,8 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection('userhemo').get();
 
+  String docId = querySnapshot.size.toString();
+
   if (querySnapshot.size > 0) {
     for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
       // Acesso aos dados de cada documento individualmente
@@ -126,15 +130,17 @@ void loginValidationHemo(TextEditingController emailwritten, TextEditingControll
             cnpj: userData['cnpj'],
             lat: userData['lat'],
             long: userData['long'],
-            sangue: userData['sangue']
+            sangue: userData['sangue'],
           );
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => LoginHemocenter(hemoData: hemoData)));
             //signup screen
+          flag = 1;
+          await Future.delayed(Duration(milliseconds: 500));
         }
-        else if (email != emailwritten.text && senha != senhawritten.text){
+        else if (email != emailwritten.text && senha != senhawritten.text && flag == 0){
           showDialog(
             context: context,
             builder: (BuildContext context) {

@@ -11,8 +11,6 @@ import 'package:hemocentro1/RegisterDonate.dart';
 import 'package:hemocentro1/RegisterHemocenter.dart';
 import 'package:hemocentro1/hemoData.dart';
 import 'package:hemocentro1/main.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 import 'services/remote_service.dart';
 import 'models/post.dart';
@@ -22,6 +20,7 @@ import 'package:hemocentro1/firebase_options.dart';
 
 final databaseReference = FirebaseDatabase.instance.reference();
 bool valido = false;
+int flag = 0;
 
 class DonatorData {
   final String email;
@@ -200,6 +199,7 @@ void saveUserDonatorData(DonatorData userData, BuildContext context) async {
 }
 
 void loginValidationDonator(TextEditingController emailwritten,
+
     TextEditingController senhawritten, BuildContext context) async {
   QuerySnapshot querySnapshot =
       await FirebaseFirestore.instance.collection('userdonate').get();
@@ -228,15 +228,18 @@ void loginValidationDonator(TextEditingController emailwritten,
             tipoSangue: userData['tipo_sanguineo'],
             substancias: userData['substancias'],
             data: (userData['data'] as Timestamp).toDate(),
-
           );
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
                       LoginDonator(donatorData: donatorData)));
+          // Aguardar 0,5 segundos antes de exibir o diálogo de erro
+          flag = 1;
+          await Future.delayed(Duration(milliseconds: 500));
+
           //signup screen
-        } else if (email != emailwritten.text && senha != senhawritten.text){
+        } else if (email != emailwritten.text && senha != senhawritten.text && flag == 0){
           showDialog(
             context: context,
             builder: (BuildContext context) {
